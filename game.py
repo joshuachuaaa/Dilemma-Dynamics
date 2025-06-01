@@ -53,11 +53,15 @@ class MonteCarloGame:
         self.initial_state = initial_state
         self.trials = trials
 
+        # Calculate required memory depth
+        self.max_memory = max(strat1.memory_size, strat2.memory_size)
+
     def run(self):
         total_p1 = total_p2 = 0
 
         for _ in range(self.trials):
-            state = self.initial_state
+            # Initialize padded history
+            state = [self.initial_state] * self.max_memory
             score_p1 = score_p2 = 0
 
             for _ in range(self.rounds):
@@ -74,7 +78,9 @@ class MonteCarloGame:
                 score_p1 += payoff1
                 score_p2 += payoff2
 
-                state = outcome
+                # Update history: keep only last max_memory rounds
+                state.pop(0)
+                state.append(outcome)
 
             total_p1 += score_p1
             total_p2 += score_p2
