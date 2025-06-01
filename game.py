@@ -20,6 +20,8 @@ class MarkovGame:
             from Markov.markov1 import build_transition_matrix
         elif self.max_memory == 2:
             from Markov.markov2 import build_transition_matrix
+        elif self.max_memory == 3:
+            from Markov.markov3 import build_transition_matrix
         else:
             raise ValueError(f"Unsupported memory size: {self.max_memory}")
 

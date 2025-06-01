@@ -2,6 +2,7 @@ from Strategies.strategy import Strategy
 # ============================
 # Strategy Implementations (Memory-1)
 # ============================
+# Total Number of m-0 Strategies = 3
 
 class TitForTat(Strategy):
     def __init__(self):

@@ -4,13 +4,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from game import MarkovGame, MonteCarloGame
 
-# Memory‐0 strategies
+# Memory-0 strategies
 from Strategies.m0strategies import AlwaysCooperate, AlwaysDefect, RandomStrategy
 
-# Memory‐1 strategies
+# Memory-1 strategies
 from Strategies.m1strategies import TitForTat, WinStayLoseShift, ReverseTitForTat
 
-# Memory‐2 strategies
+# Memory-2 strategies
 from Strategies.m2strategies import (
     TitForTwoTats,
     ClearGrudger,
@@ -19,10 +19,20 @@ from Strategies.m2strategies import (
     SuspiciousTf2T,
 )
 
+# Memory-3 strategies
+from Strategies.m3strategies import (
+    TitForThreeTats,
+    TwoForgiveOnePunish,
+    ThreeGrudger,
+    PatternFollower3,
+    Pavlov3,
+    Generous3
+)
+
 # Test parameters
 rounds = 50
-error = 0.05
-trials = 50000
+error = 0.1
+trials = 10000
 tolerance = 2.0  # acceptable point difference between Markov and Monte Carlo
 
 # Group strategies by memory level
@@ -46,7 +56,15 @@ memory_2_strats = [
     SuspiciousTf2T(),
 ]
 
-# Helper to run a single matchup
+memory_3_strats = [
+    TitForThreeTats(),
+    TwoForgiveOnePunish(),
+    ThreeGrudger(),
+    PatternFollower3(),
+    Pavlov3(),
+    Generous3()
+]
+
 def run_matchup(strat1, strat2):
     print(f"\n--- Testing {strat1.name} vs {strat2.name} ---")
 
@@ -80,17 +98,22 @@ def run_matchup(strat1, strat2):
         print("✅ Check passed: Monte Carlo matches Markov within tolerance.")
 
 
-# 1. Memory-2 vs Memory-0
-for m2 in memory_2_strats:
+# 1. Memory-3 vs Memory-0
+for m3 in memory_3_strats:
     for m0 in memory_0_strats:
-        run_matchup(m2, m0)
+        run_matchup(m3, m0)
 
-# 2. Memory-2 vs Memory-1
-for m2 in memory_2_strats:
+# 2. Memory-3 vs Memory-1
+for m3 in memory_3_strats:
     for m1 in memory_1_strats:
-        run_matchup(m2, m1)
+        run_matchup(m3, m1)
 
-# 3. (Optional) Memory-2 vs Memory-2 (sanity check)
-for i in range(len(memory_2_strats)):
-    for j in range(i + 1, len(memory_2_strats)):
-        run_matchup(memory_2_strats[i], memory_2_strats[j])
+# 3. Memory-3 vs Memory-2
+for m3 in memory_3_strats:
+    for m2 in memory_2_strats:
+        run_matchup(m3, m2)
+
+# 4. Memory-3 vs Memory-3 (sanity check)
+for i in range(len(memory_3_strats)):
+    for j in range(i + 1, len(memory_3_strats)):
+        run_matchup(memory_3_strats[i], memory_3_strats[j])

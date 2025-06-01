@@ -4,7 +4,7 @@ import random
 # ============================
 # Strategy Implementations (Memory-0)
 # ============================
-
+# Total Number of m-0 Strategies = 3
 class AlwaysDefect(Strategy):
     def __init__(self):
         self.name = "AlwaysDefect"
@@ -34,7 +34,7 @@ class AlwaysCooperate(Strategy):
 class RandomStrategy(Strategy):
     def __init__(self, coop_prob=0.5):
         self.name = "RandomStrategy"
-        self.is_nice = True if coop_prob == 1.0 else False   # only pure-cooperators are nice
+        self.is_nice = True if coop_prob >= 0.5 else False   # majority pure-cooperators are nice
         self.memory_size = 0                                 # ignores history, fixed probability
         self.coop_prob = coop_prob                           # probability to cooperate
 

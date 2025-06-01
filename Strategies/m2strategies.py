@@ -2,6 +2,7 @@
 # Strategy Implementations (Memory-2)
 # ============================
 from Strategies.strategy import Strategy
+# Total Number of m-2 Strategies = 6
 
 class TitForTwoTats(Strategy):
     def __init__(self):
