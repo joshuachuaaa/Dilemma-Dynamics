@@ -1,7 +1,12 @@
-from game import Markov_Game, MonteCarloGame
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from game import MarkovGame, MonteCarloGame
 from Strategies.m1strategies import (
-    TitForTat, AlwaysDefect, AlwaysCooperate,
-    WinStayLoseShift, ReverseTitForTat, RandomStrategy
+    TitForTat, 
+    WinStayLoseShift, ReverseTitForTat
+)
+from Strategies.m0strategies import ( AlwaysDefect, AlwaysCooperate,RandomStrategy
 )
 
 # Define strategy pairs to test
@@ -24,7 +29,7 @@ for strat1, strat2 in strategy_pairs:
     print(f"\n--- Testing {strat1.name} vs {strat2.name} ---")
 
     # Run Markov Game
-    markov_game = Markov_Game(strat1, strat2, rounds=rounds, error=error, initial_state=initial_state)
+    markov_game = MarkovGame(strat1, strat2, rounds=rounds, error=error, initial_state=initial_state)
     markov_p1, markov_p2, _ = markov_game.run()
     markov_game.printResults()
 

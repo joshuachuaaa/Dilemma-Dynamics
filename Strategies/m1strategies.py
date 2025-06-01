@@ -10,7 +10,7 @@ class TitForTat(Strategy):
         self.memory_size = 1         # looks at opponent's last move
 
     def next_move(self, last_state, state_matrix):
-        _, opponent_last = state_matrix[last_state]
+        _, opponent_last = state_matrix[last_state[-1]]
         return opponent_last
 
     def move_probabilities(self, last_state, state_matrix):
@@ -24,7 +24,7 @@ class WinStayLoseShift(Strategy):
         self.memory_size = 1         # looks at last round's outcome
 
     def next_move(self, last_state, state_matrix):
-        my_last, opp_last = state_matrix[last_state]
+        my_last, opp_last = state_matrix[last_state[-1]]
         if my_last == opp_last:
             return my_last  # win → stay
         else:
@@ -42,7 +42,7 @@ class ReverseTitForTat(Strategy):
         self.memory_size = 1         # looks at opponent's last move
 
     def next_move(self, last_state, state_matrix):
-        _, opponent_last = state_matrix[last_state]
+        _, opponent_last = state_matrix[last_state[-1]]
         return "D" if opponent_last == "C" else "C"
 
     def move_probabilities(self, last_state, state_matrix):
