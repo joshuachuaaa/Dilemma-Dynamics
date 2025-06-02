@@ -146,3 +146,30 @@ class Generous3(Strategy):
         m = self.next_move(last_state, state_matrix)
         return {"C": 1.0 if m=="C" else 0.0,
                 "D": 1.0 if m=="D" else 0.0}
+    
+class UnforgivingPatternHunter(Strategy):
+    def __init__(self):
+        self.name = "UnforgivingPatternHunter"
+        self.is_nice = False
+        self.memory_size = 3
+
+    def next_move(self, last_state, state_matrix):
+        _, opp_a = state_matrix[last_state[-3]]
+        _, opp_b = state_matrix[last_state[-2]]
+        _, opp_c = state_matrix[last_state[-1]]
+
+        if opp_a == "C" and opp_b == "C" and opp_c == "C":
+            # Exploit pure cooperators
+            return "D"
+
+        if opp_a == "D" or opp_b == "D" or opp_c == "D":
+            # Punish if they defected even once
+            return "D"
+
+        # Only cooperate if mixed (e.g., CCD, DCC, etc.)
+        return "C"
+
+    def move_probabilities(self, last_state, state_matrix):
+        move = self.next_move(last_state, state_matrix)
+        return {"C": 1.0 if move == "C" else 0.0, "D": 1.0 if move == "D" else 0.0}
+

@@ -5,3 +5,9 @@ state_to_last_moves = {
     "DC": ("D", "C"),
     "DD": ("D", "D"),
 }
+state_to_last_moves_reversed = {
+    "CC": ("C", "C"),
+    "CD": ("D", "C"),
+    "DC": ("C", "D"),
+    "DD": ("D", "D"),
+}

@@ -1,5 +1,5 @@
 import numpy as np
-from gamestates import state_to_last_moves, states
+from gamestates import state_to_last_moves, states, state_to_last_moves_reversed
 # ============================
 # Transition Matrix Logic for memory-2
 # ============================
@@ -17,7 +17,7 @@ def build_transition_matrix(strat1, strat2, error=0.0):
     for i, (prev, last) in enumerate(memory2_states):
         # Ask each strategy for their probabilistic move given the last two‐rounds of history
         p1_probs = strat1.move_probabilities([prev, last], state_to_last_moves)
-        p2_probs = strat2.move_probabilities([prev, last], state_to_last_moves)
+        p2_probs = strat2.move_probabilities([prev, last], state_to_last_moves_reversed)
 
         # Flip moves with probability=error
         final_p1 = {

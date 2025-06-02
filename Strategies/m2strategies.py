@@ -127,6 +127,10 @@ class Prober(Strategy):
         self.initial_moves = ["D", "C", "C"]
         self.round_counter = 0
         self.detected_punishment = False
+    
+    def reset(self):
+        self.detected_punishment = False
+        self.round_counter = 0
 
     def next_move(self, last_state, state_matrix):
         if self.round_counter < 3:
@@ -149,5 +153,48 @@ class Prober(Strategy):
     def move_probabilities(self, last_state, state_matrix):
         intended = self.next_move(last_state, state_matrix)
         return {"C": 1.0 if intended == "C" else 0.0, "D": 1.0 if intended == "D" else 0.0}
+
+
+class Grim2(Strategy):
+    def __init__(self):
+        self.name = "Grim2"
+        self.is_nice = False
+        self.memory_size = 2
+        self.triggered = False
+    
+    def reset(self):
+        self.triggered = False
+
+    def next_move(self, last_state, state_matrix):
+        if self.triggered:
+            return "D"
+        for past in last_state[-2:]:
+            _, opp = state_matrix[past]
+            if opp == "D":
+                self.triggered = True
+                return "D"
+        return "C"
+
+    def move_probabilities(self, last_state, state_matrix):
+        move = self.next_move(last_state, state_matrix)
+        return {"C": 1.0 if move == "C" else 0.0, "D": 1.0 if move == "D" else 0.0}
+    
+
+class Vindictive2(Strategy):
+    def __init__(self):
+        self.name = "Vindictive2"
+        self.is_nice = False
+        self.memory_size = 2
+
+    def next_move(self, last_state, state_matrix):
+        _, opp_prev = state_matrix[last_state[-2]]
+        _, opp_last = state_matrix[last_state[-1]]
+        if opp_prev == "D" or opp_last == "D":
+            return "D"
+        return "C"
+
+    def move_probabilities(self, last_state, state_matrix):
+        move = self.next_move(last_state, state_matrix)
+        return {"C": 1.0 if move == "C" else 0.0, "D": 1.0 if move == "D" else 0.0}
 
 

@@ -1,7 +1,7 @@
 # Markov/markov3.py
 
 import numpy as np
-from gamestates import state_to_last_moves, states
+from gamestates import state_to_last_moves, states, state_to_last_moves_reversed
 #   - `states` here is ["CC","CD","DC","DD"] (the memory-1 outcome set)
 #   - `state_to_last_moves` maps e.g. "CD" -> ("C","D")
 
@@ -34,7 +34,7 @@ def build_transition_matrix(strat1, strat2, error=0.0):
         # 1) ask each player what they would do after seeing those three outcomes
         #    (the strategy’s move_probabilities only looks at those three because memory_size=3)
         p1_probs = strat1.move_probabilities([s_tm3, s_tm2, s_tm1], state_to_last_moves)
-        p2_probs = strat2.move_probabilities([s_tm3, s_tm2, s_tm1], state_to_last_moves)
+        p2_probs = strat2.move_probabilities([s_tm3, s_tm2, s_tm1], state_to_last_moves_reversed)
 
         # 2) incorporate “trembling‐hand” error: flip C↔D with probability=error
         final_p1 = {

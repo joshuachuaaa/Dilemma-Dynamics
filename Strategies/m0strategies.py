@@ -1,10 +1,5 @@
 from Strategies.strategy import Strategy
 import random
-
-# ============================
-# Strategy Implementations (Memory-0)
-# ============================
-# Total Number of m-0 Strategies = 3
 class AlwaysDefect(Strategy):
     def __init__(self):
         self.name = "AlwaysDefect"
