@@ -1,7 +1,7 @@
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from game import MarkovGame, MonteCarloGame
+from Game.game import MarkovGame, MonteCarloGame
 from Strategies.m1strategies import (
     TitForTat, 
     WinStayLoseShift, ReverseTitForTat

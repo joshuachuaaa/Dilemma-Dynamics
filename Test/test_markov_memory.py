@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from game import MarkovGame, MonteCarloGame
+from Game.game import MarkovGame, MonteCarloGame
 
 # Memory‐0 strategies
 from Strategies.m0strategies import AlwaysCooperate, AlwaysDefect, RandomStrategy
