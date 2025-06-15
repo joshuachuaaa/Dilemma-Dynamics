@@ -29,7 +29,7 @@ class ClearGrudger(Strategy):
     def __init__(self):
         self.name = "ClearGrudger"
         self.memory_size = 2
-        self.is_nice = False  # since it punishes after any single D
+        self.is_nice = True  # since it punishes after any single D
 
     def next_move(self, last_state, state_matrix):
         prev, last = last_state[-2], last_state[-1]

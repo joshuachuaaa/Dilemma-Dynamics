@@ -1,4 +1,4 @@
-# tournament_driver.py
+# tournament.py
 
 import itertools
 import numpy as np
@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # Import your game engines
 from Game.game import MarkovGame, MonteCarloGame
 
-# Import all hand-coded strategies
+# Import all hand‐coded strategies
 from Strategies.m0strategies import AlwaysCooperate, AlwaysDefect, RandomStrategy
 from Strategies.m1strategies import TitForTat, WinStayLoseShift, ReverseTitForTat, GrimTrigger
 from Strategies.m2strategies import (
@@ -31,40 +31,36 @@ from Strategies.m3strategies import (
     UnforgivingPatternHunter
 )
 
-# Import Chromosome-based strategy (example)
+# Import Chromosome‐based strategy
 from Strategies.chromosomes import ChromosomeStrategy
 
 # ----------------------------------------------------------------------
-# 1) DEFINE YOUR COMPETITOR LIST HERE
-#
-#    Simply instantiate one object of each strategy class you want to include.
-#    You can add as many ChromosomeStrategy(...) instances as you like—just
-#    make sure the bitstring length is 4**m for m = {0,1,2,3}.
+# 1) DEFINE COMPETITOR LIST 
 # ----------------------------------------------------------------------
 competitors = [
-    # Memory-0 strategies
-    #AlwaysCooperate(),
+    # Memory‐0 strategies
+    # AlwaysCooperate(),
     AlwaysDefect(),
     RandomStrategy(coop_prob=0.5),
 
-    # Memory-1 strategies
+    # Memory‐1 strategies
     TitForTat(),
     WinStayLoseShift(),
     ReverseTitForTat(),
-    #GrimTrigger(),
+    # GrimTrigger(),
 
-    # Memory-2 strategies
+    # Memory‐2 strategies
     TitForTwoTats(),
-    ClearGrudger(),
+    #ClearGrudger(),
     Pavlov2(),
     GenerousTwoTitForTwo(),
     SuspiciousTf2T(),
-    #Prober(),
-    #Grim2(),
-    #Vindictive2(),
+    # Prober(),
+    # Grim2(),
+    # Vindictive2(),
 
-    # Memory-3 strategies
-    TitForThreeTats(),
+    # Memory‐3 strategies
+    #TitForThreeTats(),
     TwoForgiveOnePunish(),
     ThreeGrudger(),
     PatternFollower3(),
@@ -72,12 +68,9 @@ competitors = [
     Generous3(),
     UnforgivingPatternHunter(),
 
-    # Example Chromosome-based strategies:
-    #   - "0101" is exactly a memory-1 TitForTat
-    #   - We could build any 4^m bitstring for m=0..3. Below are two examples:
-    #ChromosomeStrategy("01"),       # m=1, equivalent to AlwaysDefect vs. AlwaysCooperate mapping
-    #ChromosomeStrategy("0101"),     # m=1, exactly TitForTat
-    # (if we had a 16-bit string we would get a memory-2 chromosome, etc.)
+    # Example Chromosome‐based strategies:
+    # ChromosomeStrategy("01"),       # m=1, equivalent to AlwaysDefect vs. AlwaysCooperate mapping
+    # ChromosomeStrategy("0101"),     # m=1, exactly TitForTat
 ]
 
 # ----------------------------------------------------------------------
@@ -88,14 +81,6 @@ N = len(competitors)
 
 # ----------------------------------------------------------------------
 # 3) MAIN TOURNAMENT FUNCTION
-#
-#    - engine_type: either "markov" or "montecarlo"
-#    - rounds: number of rounds per pairing (e.g. 50)
-#    - trials: only used if engine_type == "montecarlo" (e.g. 10_000)
-#    - error: trembling-hand error probability (0.0 means no error; you can try 0.01, etc.)
-#
-#    Returns a DataFrame `df_payoffs` such that df_payoffs.loc[s_i, s_j]
-#    = expected payoff of strategy i when playing strategy j.
 # ----------------------------------------------------------------------
 def run_tournament(
     competitors,
@@ -105,15 +90,14 @@ def run_tournament(
     error=0.0,
 ):
     """
-    Run a round-robin tournament over the given list of strategy instances.
-    Skip self-matches and avoid redundant matches by only iterating i < j.
+    Run a round‐robin tournament over the given list of strategy instances.
+    Skip self‐matches and avoid redundant matches by only iterating i < j.
     Fill in a symmetric payoff matrix: payoff[i,j] = payoff_i_vs_j, payoff[j,i] = payoff_j_vs_i.
     """
-
     names = [s.name for s in competitors]
     N = len(competitors)
 
-    # Initialize two N×N numpy arrays of floats; fill diagonals with np.nan (no self-play)
+    # Initialize two N×N numpy arrays of floats; fill diagonals with np.nan (no self‐play)
     payoff_matrix = np.full((N, N), np.nan, dtype=float)
 
     # Loop over all unordered pairs (i < j)
@@ -146,18 +130,11 @@ def run_tournament(
 
 
 # ----------------------------------------------------------------------
-# 4) EXAMPLE USAGE
-#
-#    Run four different tournaments:
-#      A) Markov, error=0.0
-#      B) Markov, error=0.05
-#      C) Monte Carlo, error=0.0
-#      D) Monte Carlo, error=0.05
-#
+# 4)  USAGE 
 # ----------------------------------------------------------------------
 if __name__ == "__main__":
     ROUNDS = 50
-    TRIALS = 10000
+    TRIALS = 10_000
     ERR_0 = 0.0
     ERR_1 = 0.05
 
@@ -198,10 +175,7 @@ if __name__ == "__main__":
     print(df_mc_err.round(2))
 
     # ------------------------------------------------------------------
-    # 5) OPTIONAL: Compare Markov vs Monte Carlo for memory-3 strategies
-    #
-    #    Extract only those rows/columns corresponding to memory_size == 3.
-    #    Then compute difference: (Markov_noerr - MC_noerr).
+    # 5) OPTIONAL: Compare Markov vs Monte Carlo for memory‐3 strategies
     # ------------------------------------------------------------------
     mem3_names = [
         s.name for s in competitors if getattr(s, "memory_size", 0) == 3
@@ -215,9 +189,6 @@ if __name__ == "__main__":
 
     # ------------------------------------------------------------------
     # 6) OPTIONAL: PLOTTING HEATMAPS
-    #
-    #    We’ll show a basic heatmap of the Markov payoff matrix (error=0.00).
-    #    You can repeat for any DataFrame printed above.
     # ------------------------------------------------------------------
     def plot_heatmap(df, title):
         plt.figure(figsize=(8, 6))
@@ -234,9 +205,6 @@ if __name__ == "__main__":
 
     # ------------------------------------------------------------------
     # 7) OPTIONAL: RANKING AND NORMALIZING PAYOFFS
-    #
-    #    You might want to sum each row to get a “total tournament payoff” and
-    #    rank strategies by how well they did on average.
     # ------------------------------------------------------------------
     ranking_markov = df_markov_noerr.sum(axis=1).sort_values(ascending=False)
     print("\n--- Total Markov Scores (error=0.00), Ranked ---")
@@ -246,7 +214,7 @@ if __name__ == "__main__":
     print("\n--- Total Monte Carlo Scores (error=0.00), Ranked ---")
     print(ranking_mc.round(1))
 
-    # If you want “average payoff per round” instead of cumulative, simply divide by ROUNDS:
+    # If you want “average payoff per round” instead of cumulative, divide by ROUNDS:
     avg_per_round_markov = ranking_markov / ROUNDS
     avg_per_round_mc = ranking_mc / ROUNDS
 
@@ -254,3 +222,73 @@ if __name__ == "__main__":
     print(avg_per_round_markov.round(3))
     print("\n--- Average per Round (Monte Carlo) ---")
     print(avg_per_round_mc.round(3))
+
+
+    # ==============================================================================
+    # 8) NEW: HORIZONTAL BAR CHART OF TOTAL SCORES (COLOR‐CODED BY niceness)
+    # ==============================================================================
+
+    # 8a) Calculate total‐score Series (sum over rows of df_markov_noerr)
+    total_scores = df_markov_noerr.sum(axis=1)
+
+    # 8b) Build quick lookups for each strategy’s is_nice and memory_size
+    name_to_nice = {s.name: s.is_nice for s in competitors}
+    name_to_memory = {s.name: s.memory_size for s in competitors}
+
+    # 8c) Sort strategies by total score (ascending=True so barh plots bottom up)
+    sorted_scores = total_scores.sort_values(ascending=True)
+
+    # 8d) Assign red/green color based on niceness
+    colors = ["green" if name_to_nice[name] else "red" for name in sorted_scores.index]
+
+    # 8e) Plot horizontal bar chart
+    plt.figure(figsize=(8, 6))
+    plt.barh(sorted_scores.index, sorted_scores.values, color=colors)
+    plt.xlabel("Total Cumulative Score")
+    plt.title("Total Tournament Scores (Markov, no error)\n(Green = Nice – Red = Not Nice)")
+    plt.tight_layout()
+    plt.show()
+
+
+    # ==============================================================================
+    # 9) NEW: BOXPLOT OF “AVERAGE SCORE PER ROUND” GROUPED BY memory_size
+    # ==============================================================================
+
+    # 9a) Create a small DataFrame with one row per strategy
+    stats_df = pd.DataFrame({
+        "strategy": total_scores.index,
+        "total_score": total_scores.values,
+        "avg_per_round": total_scores.values / ROUNDS,
+        "memory_size": [name_to_memory[name] for name in total_scores.index],
+        "is_nice": [name_to_nice[name] for name in total_scores.index],
+    })
+
+    # 9b) Boxplot: average‐per‐round distributions by memory size
+    plt.figure(figsize=(8, 6))
+    stats_df.boxplot(column="avg_per_round", by="memory_size")
+    plt.xlabel("Memory Size (m)")
+    plt.ylabel("Average Score per Round")
+    plt.title("Distribution of Average Score per Round by Memory Size")
+    # Remove the automatic "Boxplot grouped by memory_size" supertitle
+    plt.suptitle("")
+    plt.tight_layout()
+    plt.show()
+
+
+    # ------------------------------------------------------------------
+    # 10) OPTIONAL: ANY FURTHER ANALYSIS
+    # ------------------------------------------------------------------
+    # For instance, you could also compare “nice” vs “not nice” average distributions:
+    #
+    plt.figure(figsize=(6, 4))
+    stats_df.boxplot(column="avg_per_round", by="is_nice")
+    plt.xlabel("Is Nice?")
+    plt.ylabel("Average Score per Round")
+    plt.title("Nice vs. Non‐nice Strategy Performance")
+    plt.suptitle("")
+    plt.tight_layout()
+    plt.show()
+    #
+    # Or compute correlation between memory_size and avg_per_round, etc.
+
+
