@@ -1,3 +1,4 @@
+
 # Iterated‑Prisoner’s‑Dilemma Toolkit
 
 *FIT3139 / FIT3152 Final‑Project code*\
@@ -5,7 +6,7 @@
 
 ---
 
-\## 1  Project layout
+## 1  Project layout
 
 ```text
 project_root/
@@ -26,7 +27,7 @@ project_root/
 
 ---
 
-\## 2  Quick‑start — reproduce all report figures
+## 2  Quick‑start — reproduce all report figures
 
 ```bash
 # 1) create a fresh environment (Python ≥ 3.10)
@@ -45,7 +46,7 @@ Figures appear in Matplotlib windows **and** are saved to `./figures/`.
 
 ---
 
-\## 3  File‑by‑file guide
+## 3  File‑by‑file guide
 
 | File                | Purpose                                                                                                                                                                                          | Typical runtime |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
@@ -56,7 +57,7 @@ Figures appear in Matplotlib windows **and** are saved to `./figures/`.
 
 ---
 
-\## 4  Performance awareness
+## 4  Performance awareness
 
 | Component                  | Complexity                               | Design choice & impact                                               |
 | -------------------------- | ---------------------------------------- | -------------------------------------------------------------------- |
@@ -67,7 +68,7 @@ Figures appear in Matplotlib windows **and** are saved to `./figures/`.
 
 ---
 
-\## 5  Running your own matches
+## 5  Running your own matches
 
 ```python
 from Game.game import MarkovGame, MonteCarloGame
@@ -86,13 +87,14 @@ To add a custom strategy, subclass `Strategies.strategy.Strategy` and implement:
 
 ---
 
-\## 6  Verification hooks
+## 6  Verification hooks
 
 - `` auto‑executes `verification_test()` — checks population invariance when μ = 0, k = 0.
 - `` reproduces deterministic vs Monte‑Carlo pay‑offs in < 2 s.
 - Code passes `flake8` / `ruff`; all folders are import‑safe via `__init__.py`.
 
 =======
+
 # Dilemma-Dynamics
 This project implements a framework to analyze and compare strategies in the iterated Prisoner’s Dilemma using Markov chain analysis and Monte Carlo simulations 
 
