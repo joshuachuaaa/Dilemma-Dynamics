@@ -6,11 +6,13 @@
 
 # ------------------------------------------------------------------- imports
 from Utils.save_figure import save_fig
+from Utils.random_seed import set_seed
 import itertools, time
 import numpy  as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from Game.game import MonteCarloGame
+
 
 # --------------------------- strategy imports (unchanged) -------------------
 from Strategies.m0strategies import AlwaysDefect, RandomStrategy
@@ -22,6 +24,7 @@ from Strategies.m3strategies import (
     Pavlov3, Generous3, UnforgivingPatternHunter)
 
 # ---------------------------------------------------------------- constants
+set_seed()
 ROUNDS       = 50
 TRIALS       = 10_000
 ERROR_LEVELS = [0.00, 0.05, 0.10]
@@ -107,6 +110,7 @@ if __name__ == "__main__":
     )
     # -------------------------------------------------------------------------
     plt.tight_layout()
+    save_fig("A_performance_vs_noise.png", dpi=300, show=True)
 
 
     # ----------------------------------------------------------------- Fig B
@@ -121,6 +125,7 @@ if __name__ == "__main__":
         if ax is axes[0]:
             ax.set_ylabel("avg pay-off / round")
     fig.suptitle("B) Distribution by memory size"); fig.tight_layout()
+    save_fig("B_boxplot_memory.png", dpi=300, show=True)
 
     # ----------------------------------------------------------------- Fig C  (nice vs nasty box-plots)
     fig, axes = plt.subplots(1, len(ERROR_LEVELS), figsize=(10, 4), sharey=True)
@@ -134,6 +139,7 @@ if __name__ == "__main__":
         if ax is axes[0]:
             ax.set_ylabel("avg pay-off / round")
     fig.suptitle("C) Nice vs nasty distribution"); fig.tight_layout()
+    save_fig("C_boxplot_niceness.png", dpi=300, show=True)
 
     # ----------------------------------------------------------------- Fig D
     plt.figure(figsize=(5,4))
@@ -141,6 +147,7 @@ if __name__ == "__main__":
     plt.axhline(0, ls='--', lw=0.8)
     plt.xlabel("ε"); plt.ylabel("gap (nasty – nice)")
     plt.title("D) Class gap shrinkage"); plt.tight_layout()
+    save_fig("D_class_gap.png", dpi=300, show=True)
 
     # ----------------------------------------------------------------- Fig E
     mu, sigma = payoff_sweep.mean(), payoff_sweep.std()
@@ -149,8 +156,9 @@ if __name__ == "__main__":
     plt.xlabel("ε"); plt.ylabel("mean pay-off / round")
     plt.title("E) Global μ ± σ"); plt.grid(ls='--', axis='y', lw=0.4)
     plt.tight_layout()
+    save_fig("E_global_mu_sigma.png", dpi=300, show=True)
 
-    # ----------------------------------------------------------------- Fig F (optional bar chart per ε)
+    # ----------------------------------------------------------------- Fig F
     if MAKE_BARCHART:
         for ε in ERROR_LEVELS:
             lbl = f"{int(ε*100)}%"
@@ -162,8 +170,8 @@ if __name__ == "__main__":
             plt.xlabel("avg pay-off / round")
             plt.title(f"F) Pay-offs at ε = {ε:.0%}")
             plt.tight_layout()
+            save_fig(f"F_bar_{lbl}.png", dpi=300, show=True)
 
-    plt.show()
     timestamp("All plots rendered – done.")
 
 

@@ -24,6 +24,7 @@ Adds depth for FIT3139 Final Report – Modelling Question 2:
 
 # ─────────────────── imports ──────────────────────────────────────────────
 from Utils.save_figure import save_fig
+from Utils.random_seed import set_seed
 import random, itertools, time, math
 import numpy as np
 import pandas as pd
@@ -48,6 +49,7 @@ from Strategies.chromosomes import ChromosomeStrategy
 from tournament import run_tournament
 
 # ─────────────────── hyper-parameters ─────────────────────────────────────
+set_seed()
 GENERATIONS   = 20
 TRIALS        = 1_000
 ROUNDS        = 50
@@ -196,7 +198,8 @@ plt.xlabel("Generation")
 plt.ylabel("# Diplomatic countries  (mean ±1 SD)")
 plt.title("Evolution of cooperation – 15 replicates each")
 plt.legend(ncol=2, fontsize="small")
-plt.tight_layout();  plt.show()
+plt.tight_layout()
+save_fig("G1_diplomacy_fraction.png", dpi=300, show=True)
 
 # Fig 2 — mean fitness curves (mechanistic insight)
 plt.figure(figsize=(7, 4))
@@ -208,7 +211,8 @@ for rule, style in [("trunc", "-"), ("prop", "--")]:
 plt.xlabel("Generation")
 plt.ylabel("Mean population pay-off")
 plt.title("Fitness ascent under competing selection rules")
-plt.legend(); plt.tight_layout(); plt.show()
+plt.legend(); plt.tight_layout()
+save_fig("G2_mean_fitness.png", dpi=300, show=True)
 
 # Fixation bars ±95 % CI
 agg = (df.groupby(["rule", "k"])["fix"]
@@ -229,7 +233,8 @@ for i, rule in enumerate(rules):
 plt.xticks(x, x)
 plt.ylabel("Fixation probability  (±95 % CI)")
 plt.title("Elite-slot size k vs co-operative takeover")
-plt.legend(); plt.tight_layout(); plt.show()
+plt.legend(); plt.tight_layout()
+save_fig("G3_fixation_bars.png", dpi=300, show=True)
 
 # Fig 3 — ECDF & hazard of takeover time
 plt.figure(figsize=(6, 4))
@@ -243,7 +248,8 @@ for (rule, k), style in linemap.items():
 plt.xlabel("Generation of first ≥5 diplomats")
 plt.ylabel("ECDF")
 plt.title("Speed of majority takeover")
-plt.legend(); plt.tight_layout(); plt.show()
+plt.legend(); plt.tight_layout()
+save_fig("G4_ecdf_takeover.png", dpi=300, show=True)
 
 # Hazard plot
 plt.figure(figsize=(6, 4))
@@ -258,40 +264,44 @@ for (rule, k), style in linemap.items():
 plt.xlabel("Generation")
 plt.ylabel("Discrete hazard h(t)")
 plt.title("When does takeover happen?")
-plt.legend(); plt.tight_layout(); plt.show()
+plt.legend(); plt.tight_layout(); 
+save_fig("G5_hazard_takeover.png", dpi=300, show=True)
 
 # ───────────────────────── statistical analysis ───────────────────────────
-summary = (df.groupby(["rule", "k"])
-             .agg(fix_prob=("fix", "mean"),
-                  med_t_major=("t_major", "median"))
-             .round(2))
-print("\n=== SUMMARY over 15 replicates ===")
-print(summary, "\n")
+# Uncomment for statistical analysis
+# summary = (df.groupby(["rule", "k"])
+#              .agg(fix_prob=("fix", "mean"),
+#                   med_t_major=("t_major", "median"))
+#              .round(2))
+# print("\n=== SUMMARY over 15 replicates ===")
+# print(summary, "\n")
 
-# Key contrast: trunc k=2 vs prop k=2
-trunc2 = df[(df.rule == "trunc") & (df.k == 2)]
-prop2  = df[(df.rule == "prop")  & (df.k == 2)]
-table  = [[trunc2.fix.sum(), trunc2.shape[0] - trunc2.fix.sum()],
-          [prop2.fix.sum(),  prop2.shape[0]  - prop2.fix.sum()]]
-odds, p_fisher = ss.fisher_exact(table, alternative="greater")
-U, p_mw = ss.mannwhitneyu(trunc2.t_major.dropna(),
-                          prop2.t_major.dropna(), alternative="less")
-rr = trunc2.fix.mean() / prop2.fix.mean() if prop2.fix.mean() > 0 else np.inf
-med_delta = np.nanmedian(prop2.t_major) - np.nanmedian(trunc2.t_major)
+# # Key contrast: trunc k=2 vs prop k=2
+# trunc2 = df[(df.rule == "trunc") & (df.k == 2)]
+# prop2  = df[(df.rule == "prop")  & (df.k == 2)]
+# table  = [[trunc2.fix.sum(), trunc2.shape[0] - trunc2.fix.sum()],
+#           [prop2.fix.sum(),  prop2.shape[0]  - prop2.fix.sum()]]
+# odds, p_fisher = ss.fisher_exact(table, alternative="greater")
+# U, p_mw = ss.mannwhitneyu(trunc2.t_major.dropna(),
+#                           prop2.t_major.dropna(), alternative="less")
+# rr = trunc2.fix.mean() / prop2.fix.mean() if prop2.fix.mean() > 0 else np.inf
+# med_delta = np.nanmedian(prop2.t_major) - np.nanmedian(trunc2.t_major)
 
-print("=== Statistical comparison: trunc k=2  vs  prop k=2 ===")
-print(f"Fixation  09/15 vs 02/15  |  Fisher p={p_fisher:.4f}  "
-      f"odds={odds:.2f}  RR={rr:.2f}")
-print(f"Take-over medians  {np.nanmedian(trunc2.t_major):.1f} vs "
-      f"{np.nanmedian(prop2.t_major):.1f}  |  Mann-Whitney p={p_mw:.4f}  "
-      f"Δ={med_delta:+.1f} gens\n")
+# print("=== Statistical comparison: trunc k=2  vs  prop k=2 ===")
+# print(f"Fixation  09/15 vs 02/15  |  Fisher p={p_fisher:.4f}  "
+#       f"odds={odds:.2f}  RR={rr:.2f}")
+# print(f"Take-over medians  {np.nanmedian(trunc2.t_major):.1f} vs "
+#       f"{np.nanmedian(prop2.t_major):.1f}  |  Mann-Whitney p={p_mw:.4f}  "
+#       f"Δ={med_delta:+.1f} gens\n")
 
-# Logistic regression (if statsmodels present)
-if smp:
-    df_lr = df.replace({"rule": {"trunc": 0, "prop": 1}})
-    mdl = smf.logit("fix ~ C(rule) * k", data=df_lr).fit(disp=False)
-    print("=== Logistic regression: fix ~ rule * k ===")
-    print(mdl.summary(xname=["Intercept", "prop", "k", "prop:k"]))
+# # Logistic regression (if statsmodels present)
+# if smp:
+#     df_lr = df.replace({"rule": {"trunc": 0, "prop": 1}}).copy()
+#     df_lr["fix"] = df_lr["fix"].astype(int)         
+
+#     mdl = smf.logit("fix ~ C(rule) * k", data=df_lr).fit(disp=False)
+#     print("=== Logistic regression: fix ~ rule * k ===")
+#     print(mdl.summary(xname=["Intercept", "prop", "k", "prop:k"]))
 
 # ───────────────────────── robustness sweeps ──────────────────────────────
 def sweep(pop_size=None, mu=None, tag=""):

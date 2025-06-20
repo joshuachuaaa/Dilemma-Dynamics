@@ -3,6 +3,8 @@
 # File: tournament.py
 # Purpose: Full round-robin tournament driver with optional heat-maps / rankings.
 # ──────────────────────────────────────────────────────────
+from Utils.save_figure import save_fig
+from Utils.random_seed import set_seed
 import itertools
 import os
 import numpy as np
@@ -80,6 +82,7 @@ competitors = [
 # ----------------------------------------------------------------------
 # 2) UTILITY: extract "name" from each strategy for labeling
 # ----------------------------------------------------------------------
+set_seed()
 strategy_names = [s.name for s in competitors]
 N = len(competitors)
 # ----------------------------------------------------------------------
@@ -201,13 +204,7 @@ if __name__ == "__main__":
         plt.yticks(range(len(df)), df.index)
         plt.title(title)
         plt.tight_layout()
-        
-        # Save the figure as a .png file
-        filename = f"{title.replace(' ', '_')}.png"
-        plt.savefig(filename, dpi=300)  # High-resolution output
-        print(f"Saved heatmap as {filename}")
-        
-        plt.show()
+        save_fig(f"{title.replace(' ', '_')}.png", dpi=300, show=True)
 
     plot_heatmap(df_markov_noerr, "Markov Payoffs (error=0.00)")
     plot_heatmap(df_mc_noerr, "Monte Carlo Payoffs (error=0.00)")
@@ -256,7 +253,7 @@ if __name__ == "__main__":
     plt.xlabel("Total Cumulative Score")
     plt.title("Total Tournament Scores (Markov, no error)\n(Green = Nice – Red = Not Nice)")
     plt.tight_layout()
-    plt.show()
+    save_fig("Total_tournament_scores.png", dpi=300, show=True)
 
 
     # ==============================================================================
@@ -281,7 +278,7 @@ if __name__ == "__main__":
     # Remove the automatic "Boxplot grouped by memory_size" supertitle
     plt.suptitle("")
     plt.tight_layout()
-    plt.show()
+    save_fig("memory_size_distribution", dpi=300, show=True)
 
 
     # ------------------------------------------------------------------
@@ -296,6 +293,6 @@ if __name__ == "__main__":
     plt.title("Nice vs. Non‐nice Strategy Performance")
     plt.suptitle("")
     plt.tight_layout()
-    plt.show()
+    save_fig("nice_nasty_distribution", dpi=300, show=True)
 
 
