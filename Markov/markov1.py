@@ -1,11 +1,8 @@
+from Utils.gamestates import state_to_last_moves, states, state_to_last_moves_reversed
 import numpy as np
-from gamestates import state_to_last_moves, states, state_to_last_moves_reversed
 # ============================
 # Transition Matrix Logic for memory-1
 # ============================
-
-import numpy as np
-from gamestates import state_to_last_moves, states  # states = ["CC","CD","DC","DD"]
 
 def build_transition_probs(current_state, strat1, strat2, error=0.0):
     # Get move probabilities for player 1 and player 2

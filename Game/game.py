@@ -1,7 +1,7 @@
 import numpy as np
 import random
-from gamestates import state_to_last_moves, state_to_last_moves_reversed
-from payoff_matrix import payoff_matrix
+from Utils.gamestates import state_to_last_moves, state_to_last_moves_reversed
+from Utils.payoff_matrix import payoff_matrix
 
 class MarkovGame:
     def __init__(self, strat1, strat2, rounds=50, error=0.0, initial_state=None):

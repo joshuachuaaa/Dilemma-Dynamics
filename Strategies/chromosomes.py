@@ -1,6 +1,6 @@
 import math
 from itertools import product
-from gamestates import states  # ["CC","CD","DC","DD"]
+from Utils.gamestates import states  # ["CC","CD","DC","DD"]
 from Strategies.strategy import Strategy
 
 class ChromosomeStrategy(Strategy):

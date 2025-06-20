@@ -1,5 +1,5 @@
 from itertools import product
-from gamestates import states, state_to_last_moves
+from Utils.gamestates import states, state_to_last_moves
 
 class Strategy:
     def __init__(self):

@@ -1,7 +1,7 @@
 # Markov/markov3.py
 
 import numpy as np
-from gamestates import state_to_last_moves, states, state_to_last_moves_reversed
+from Utils.gamestates import state_to_last_moves, states, state_to_last_moves_reversed
 #   - `states` here is ["CC","CD","DC","DD"] (the memory-1 outcome set)
 #   - `state_to_last_moves` maps e.g. "CD" -> ("C","D")
 

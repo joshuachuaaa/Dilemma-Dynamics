@@ -1,10 +1,8 @@
 import numpy as np
-from gamestates import state_to_last_moves, states, state_to_last_moves_reversed
+from Utils.gamestates import state_to_last_moves, states, state_to_last_moves_reversed
 # ============================
 # Transition Matrix Logic for memory-2
 # ============================
-import numpy as np
-from gamestates import state_to_last_moves, states  # same gamestates; states = ["CC","CD","DC","DD"]
 
 # Build all ordered pairs of memory-1 states. E.g. [ ("CC","CC"), ("CC","CD"), …, ("DD","DD") ]
 memory2_states = [(prev, last) for prev in states for last in states]
