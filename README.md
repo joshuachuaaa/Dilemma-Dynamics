@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Iterated‑Prisoner’s‑Dilemma Toolkit
 
 *FIT3139 / FIT3152 Final‑Project code*\
@@ -93,11 +92,7 @@ To add a custom strategy, subclass `Strategies.strategy.Strategy` and implement:
 - `` reproduces deterministic vs Monte‑Carlo pay‑offs in < 2 s.
 - Code passes `flake8` / `ruff`; all folders are import‑safe via `__init__.py`.
 
----
-
-Happy modelling!
-
 =======
 # Dilemma-Dynamics
 This project implements a framework to analyze and compare strategies in the iterated Prisoner’s Dilemma using Markov chain analysis and Monte Carlo simulations 
->>>>>>> origin/main
+
