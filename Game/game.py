@@ -1,3 +1,10 @@
+# ──────────────────────────────────────────────────────────
+# File: Game/game.py
+# Author: Joshua Chua Han Wei – 32781555
+# Purpose: Core engines for the IPD – deterministic MarkovGame
+#          and MonteCarloGame (with trembling-hand error support).
+# ──────────────────────────────────────────────────────────
+
 import numpy as np
 import random
 from Utils.gamestates import state_to_last_moves, state_to_last_moves_reversed

@@ -1,8 +1,11 @@
-"""
-tournamentLean.py   –  clean Monte-Carlo noise sweep with concise plots
-"""
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: tournament_test.py
+# Purpose: Minimal test harness to compare Markov vs Monte-Carlo pay-offs.
+# ──────────────────────────────────────────────────────────
 
 # ------------------------------------------------------------------- imports
+from Utils.save_figure import save_fig
 import itertools, time
 import numpy  as np
 import pandas as pd

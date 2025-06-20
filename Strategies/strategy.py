@@ -1,3 +1,11 @@
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: Strategies/strategy.py
+# Purpose: Abstract base class for all IPD strategies.
+# ──────────────────────────────────────────────────────────
+
+
+
 from itertools import product
 from Utils.gamestates import states, state_to_last_moves
 

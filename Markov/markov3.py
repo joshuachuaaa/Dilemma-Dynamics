@@ -1,4 +1,8 @@
-# Markov/markov3.py
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: Markov/markov3.py
+# Purpose: Build 64×64 transition matrix for memory-3 strategies.
+# ──────────────────────────────────────────────────────────
 
 import numpy as np
 from Utils.gamestates import state_to_last_moves, states, state_to_last_moves_reversed

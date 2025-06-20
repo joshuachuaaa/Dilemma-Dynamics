@@ -41,7 +41,7 @@ python genetic.py          # ≈ takes about an hour
 python tournamentLean.py   # ≈ 5-10 minutes
 ```
 
-Figures appear in Matplotlib windows **and** are saved to `./figures/`.
+Figures appear in Matplotlib windows **and** `./figures/`.
 
 ---
 

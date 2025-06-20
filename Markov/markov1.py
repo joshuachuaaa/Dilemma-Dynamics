@@ -1,3 +1,9 @@
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: Markov/markov1.py
+# Purpose: Build 4×4 transition matrix for memory-1 strategies.
+# ──────────────────────────────────────────────────────────
+
 from Utils.gamestates import state_to_last_moves, states, state_to_last_moves_reversed
 import numpy as np
 # ============================

@@ -1,6 +1,10 @@
-# tournament.py
-
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: tournament.py
+# Purpose: Full round-robin tournament driver with optional heat-maps / rankings.
+# ──────────────────────────────────────────────────────────
 import itertools
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -13,16 +17,16 @@ from Strategies.m0strategies import AlwaysCooperate, AlwaysDefect, RandomStrateg
 from Strategies.m1strategies import TitForTat, WinStayLoseShift, ReverseTitForTat, GrimTrigger
 from Strategies.m2strategies import (
     TitForTwoTats,
-    ClearGrudger,
+    #ClearGrudger,
     Pavlov2,
     GenerousTwoTitForTwo,
     SuspiciousTf2T,
-    Prober,
-    Grim2,
-    Vindictive2
+    # Prober,
+    # Grim2,
+    # Vindictive2
 )
 from Strategies.m3strategies import (
-    TitForThreeTats,
+    #TitForThreeTats,
     TwoForgiveOnePunish,
     ThreeGrudger,
     PatternFollower3,
@@ -78,7 +82,6 @@ competitors = [
 # ----------------------------------------------------------------------
 strategy_names = [s.name for s in competitors]
 N = len(competitors)
-
 # ----------------------------------------------------------------------
 # 3) MAIN TOURNAMENT FUNCTION
 # ----------------------------------------------------------------------
@@ -175,7 +178,7 @@ if __name__ == "__main__":
     print(df_mc_err.round(2))
 
     # ------------------------------------------------------------------
-    # 5) OPTIONAL: Compare Markov vs Monte Carlo for memory‐3 strategies
+    # 5) Compare Markov vs Monte Carlo for memory‐3 strategies
     # ------------------------------------------------------------------
     mem3_names = [
         s.name for s in competitors if getattr(s, "memory_size", 0) == 3
@@ -188,7 +191,7 @@ if __name__ == "__main__":
     print(diff_mem3.round(2))
 
     # ------------------------------------------------------------------
-    # 6) OPTIONAL: PLOTTING HEATMAPS
+    # 6) PLOTTING HEATMAPS
     # ------------------------------------------------------------------
     def plot_heatmap(df, title):
         plt.figure(figsize=(8, 6))
@@ -198,13 +201,19 @@ if __name__ == "__main__":
         plt.yticks(range(len(df)), df.index)
         plt.title(title)
         plt.tight_layout()
+        
+        # Save the figure as a .png file
+        filename = f"{title.replace(' ', '_')}.png"
+        plt.savefig(filename, dpi=300)  # High-resolution output
+        print(f"Saved heatmap as {filename}")
+        
         plt.show()
 
     plot_heatmap(df_markov_noerr, "Markov Payoffs (error=0.00)")
     plot_heatmap(df_mc_noerr, "Monte Carlo Payoffs (error=0.00)")
 
     # ------------------------------------------------------------------
-    # 7) OPTIONAL: RANKING AND NORMALIZING PAYOFFS
+    # 7) RANKING AND NORMALIZING PAYOFFS
     # ------------------------------------------------------------------
     ranking_markov = df_markov_noerr.sum(axis=1).sort_values(ascending=False)
     print("\n--- Total Markov Scores (error=0.00), Ranked ---")
@@ -225,7 +234,7 @@ if __name__ == "__main__":
 
 
     # ==============================================================================
-    # 8) NEW: HORIZONTAL BAR CHART OF TOTAL SCORES (COLOR‐CODED BY niceness)
+    # 8) HORIZONTAL  BAR CHART OF TOTAL SCORES (COLOR‐CODED BY niceness)
     # ==============================================================================
 
     # 8a) Calculate total‐score Series (sum over rows of df_markov_noerr)
@@ -251,7 +260,7 @@ if __name__ == "__main__":
 
 
     # ==============================================================================
-    # 9) NEW: BOXPLOT OF “AVERAGE SCORE PER ROUND” GROUPED BY memory_size
+    # 9) BOXPLOT OF “AVERAGE SCORE PER ROUND” GROUPED BY memory_size
     # ==============================================================================
 
     # 9a) Create a small DataFrame with one row per strategy
@@ -276,7 +285,7 @@ if __name__ == "__main__":
 
 
     # ------------------------------------------------------------------
-    # 10) OPTIONAL: ANY FURTHER ANALYSIS
+    # 10) FURTHER ANALYSIS
     # ------------------------------------------------------------------
     # For instance, you could also compare “nice” vs “not nice” average distributions:
     #
@@ -288,7 +297,5 @@ if __name__ == "__main__":
     plt.suptitle("")
     plt.tight_layout()
     plt.show()
-    #
-    # Or compute correlation between memory_size and avg_per_round, etc.
 
 

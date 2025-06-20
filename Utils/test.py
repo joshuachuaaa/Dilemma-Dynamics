@@ -1,3 +1,9 @@
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: test.py
+# Purpose: Quick sanity script – three sample match-ups using MarkovGame.
+# ──────────────────────────────────────────────────────────
+
 import numpy as np
 from Game.game import MarkovGame, MonteCarloGame
 from Strategies.m0strategies import AlwaysDefect, RandomStrategy

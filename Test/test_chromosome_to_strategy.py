@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pytest
 from Strategies.m1strategies import TitForTat
 from Strategies.chromosomes import ChromosomeStrategy
-from gamestates import state_to_last_moves
+from Utils.gamestates import state_to_last_moves
 
 @pytest.mark.parametrize("state_code", ["CC", "CD", "DC", "DD"])
 def test_tit_for_tat_chromosome_equivalence(state_code):

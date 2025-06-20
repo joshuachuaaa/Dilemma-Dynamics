@@ -1,3 +1,11 @@
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: Strategies/m1strategies.py
+# Purpose: Memory-1 strategies – Tit-for-Tat, WSLS, Reverse-TFT, Grim.
+# ──────────────────────────────────────────────────────────
+
+
+
 from Strategies.strategy import Strategy
 # ============================
 # Strategy Implementations (Memory-1)

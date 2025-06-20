@@ -1,3 +1,10 @@
+
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: genetic.py
+# Purpose: Evolutionary simulation (Modelling Question 2) – trunc vs proportional
+#          selection, plots, statistics, and built-in verification test.
+# ──────────────────────────────────────────────────────────
 """
 genetic_batch_progress.py
 ────────────────────────────────────────────────────────────────────────────
@@ -13,11 +20,10 @@ Adds depth for FIT3139 Final Report – Modelling Question 2:
 • Sanity test: μ = 0, k = POP_SIZE fixes initial cooperators (verification)
 • Optional robustness sweeps: larger N, alt μ
 
-Author: <Your Name / Student ID>
-Last updated: 15 Jun 2025
 """
 
 # ─────────────────── imports ──────────────────────────────────────────────
+from Utils.save_figure import save_fig
 import random, itertools, time, math
 import numpy as np
 import pandas as pd

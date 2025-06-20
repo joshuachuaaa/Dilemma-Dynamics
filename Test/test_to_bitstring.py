@@ -5,7 +5,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from gamestates import states, state_to_last_moves
+from Utils.gamestates import states, state_to_last_moves
 from Strategies.strategy    import Strategy
 from Strategies.m1strategies import (
     TitForTat, WinStayLoseShift, ReverseTitForTat, GrimTrigger

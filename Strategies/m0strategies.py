@@ -1,3 +1,10 @@
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: Strategies/m0strategies.py
+# Purpose: Memory-0 (stateless) strategies – Always-C, Always-D, Random.
+# ──────────────────────────────────────────────────────────
+
+
 from Strategies.strategy import Strategy
 import random
 class AlwaysDefect(Strategy):

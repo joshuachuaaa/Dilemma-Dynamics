@@ -1,3 +1,9 @@
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: Markov/markov2.py
+# Purpose: Build 16×16 transition matrix for memory-2 strategies.
+# ──────────────────────────────────────────────────────────
+
 import numpy as np
 from Utils.gamestates import state_to_last_moves, states, state_to_last_moves_reversed
 # ============================

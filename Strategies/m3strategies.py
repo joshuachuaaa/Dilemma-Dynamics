@@ -1,3 +1,10 @@
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: Strategies/m3strategies.py
+# Purpose: Memory-3 strategies – Pavlov3, Generous3, Three-Grudger, etc.
+# ──────────────────────────────────────────────────────────
+
+
 from Strategies.strategy import Strategy
 # Total Number of m-3 Strategies = 6
 

@@ -1,3 +1,10 @@
+# ──────────────────────────────────────────────────────────
+# Author: Joshua Chua Han Wei – 32781555
+# File: Strategies/m2Strategies.py
+# Purpose: Memory-2 strategies – Tf2T, Pavlov2, generous / suspicious variants.
+# ──────────────────────────────────────────────────────────
+
+
 # ============================
 # Strategy Implementations (Memory-2)
 # ============================
