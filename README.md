@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Iterated‑Prisoner’s‑Dilemma Toolkit
 
 *FIT3139 / FIT3152 Final‑Project code*\
@@ -96,3 +97,7 @@ To add a custom strategy, subclass `Strategies.strategy.Strategy` and implement:
 
 Happy modelling!
 
+=======
+# Dilemma-Dynamics
+This project implements a framework to analyze and compare strategies in the iterated Prisoner’s Dilemma using Markov chain analysis and Monte Carlo simulations 
+>>>>>>> origin/main
