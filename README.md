@@ -1,6 +1,5 @@
 # Iterated-Prisoner’s-Dilemma Toolkit
 
-*FIT3139 / FIT3152 Final-Project code*  
 **Author  Joshua Chua Han Wei — 32781555**
 
 ---
