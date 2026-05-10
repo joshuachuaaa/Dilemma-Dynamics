@@ -19,7 +19,16 @@ class Strategy:
         raise NotImplementedError("You must implement next_move() in the subclass.")
 
     def move_probabilities(self, last_state, state_matrix):
-        raise NotImplementedError("You must implement move_probabilities() in the subclass.")
+        move = self.next_move(last_state, state_matrix)
+        return self.probabilities_for_move(move)
+
+    @staticmethod
+    def probabilities_for_move(move):
+        if move == "C":
+            return {"C": 1.0, "D": 0.0}
+        if move == "D":
+            return {"C": 0.0, "D": 1.0}
+        raise ValueError(f"Unsupported strategy move: {move!r}")
 
     def reset(self):
         pass

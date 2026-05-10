@@ -103,8 +103,3 @@ class ChromosomeStrategy(Strategy):
         key = tuple(normalized)
         idx = self.history_to_index[key]
         return self.lookup_table[idx]
-
-    def move_probabilities(self, last_state, state_matrix):
-        move = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if move == "C" else 0.0,
-                "D": 1.0 if move == "D" else 0.0}

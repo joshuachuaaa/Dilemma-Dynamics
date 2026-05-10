@@ -27,11 +27,6 @@ class TitForThreeTats(Strategy):
         else:
             return "C"
 
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0,
-                "D": 1.0 if m=="D" else 0.0}
-
 
 class TwoForgiveOnePunish(Strategy):
     def __init__(self):
@@ -51,11 +46,6 @@ class TwoForgiveOnePunish(Strategy):
         else:
             return "C"
 
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0,
-                "D": 1.0 if m=="D" else 0.0}
-
 
 class ThreeGrudger(Strategy):
     def __init__(self):
@@ -74,11 +64,6 @@ class ThreeGrudger(Strategy):
         else:
             return "D"
 
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0,
-                "D": 1.0 if m=="D" else 0.0}
-
 class PatternFollower3(Strategy):
     def __init__(self):
         self.name = "PatternFollower3"
@@ -95,11 +80,6 @@ class PatternFollower3(Strategy):
             return "D"
         else:
             return "C"
-
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0,
-                "D": 1.0 if m=="D" else 0.0}
 
 
 class Pavlov3(Strategy):
@@ -125,11 +105,6 @@ class Pavlov3(Strategy):
         # Otherwise, shift away from your last move
         return "C" if my_c == "D" else "D"
 
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0,
-                "D": 1.0 if m=="D" else 0.0}
-
 
 class Generous3(Strategy):
     def __init__(self):
@@ -148,11 +123,6 @@ class Generous3(Strategy):
             return "C"
         else:
             return "D"
-
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0,
-                "D": 1.0 if m=="D" else 0.0}
     
 class UnforgivingPatternHunter(Strategy):
     def __init__(self):
@@ -175,8 +145,3 @@ class UnforgivingPatternHunter(Strategy):
 
         # Only cooperate if mixed (e.g., CCD, DCC, etc.)
         return "C"
-
-    def move_probabilities(self, last_state, state_matrix):
-        move = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if move == "C" else 0.0, "D": 1.0 if move == "D" else 0.0}
-

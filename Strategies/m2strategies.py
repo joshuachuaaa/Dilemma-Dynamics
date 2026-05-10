@@ -28,10 +28,6 @@ class TitForTwoTats(Strategy):
         else:
             return "C"
 
-    def move_probabilities(self, last_state, state_matrix):
-        intended = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if intended == "C" else 0.0, "D": 1.0 if intended == "D" else 0.0}
-
 class ClearGrudger(Strategy):
     def __init__(self):
         self.name = "ClearGrudger"
@@ -48,10 +44,6 @@ class ClearGrudger(Strategy):
             return "C"
         else:
             return "D"
-
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0, "D": 1.0 if m=="D" else 0.0}
 
 class Pavlov2(Strategy):
     def __init__(self):
@@ -75,10 +67,6 @@ class Pavlov2(Strategy):
         # Otherwise, shift away from your own last move
         return "C" if (my_last == "D") else "D"
 
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0, "D": 1.0 if m=="D" else 0.0}
-
 class GenerousTwoTitForTwo(Strategy):
     def __init__(self):
         self.name = "G2T2T"
@@ -95,10 +83,6 @@ class GenerousTwoTitForTwo(Strategy):
             return "C"
         else:
             return "D"
-
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0, "D": 1.0 if m=="D" else 0.0}
 
 class SuspiciousTf2T(Strategy):
     def __init__(self):
@@ -118,10 +102,6 @@ class SuspiciousTf2T(Strategy):
             return "D"
         else:
             return "C"
-
-    def move_probabilities(self, last_state, state_matrix):
-        m = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if m=="C" else 0.0, "D": 1.0 if m=="D" else 0.0}
 
 
 
@@ -157,10 +137,6 @@ class Prober(Strategy):
             else:
                 return "D"  # exploit
 
-    def move_probabilities(self, last_state, state_matrix):
-        intended = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if intended == "C" else 0.0, "D": 1.0 if intended == "D" else 0.0}
-
 
 class Grim2(Strategy):
     def __init__(self):
@@ -181,10 +157,6 @@ class Grim2(Strategy):
                 self.triggered = True
                 return "D"
         return "C"
-
-    def move_probabilities(self, last_state, state_matrix):
-        move = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if move == "C" else 0.0, "D": 1.0 if move == "D" else 0.0}
     
 
 class Vindictive2(Strategy):
@@ -199,9 +171,3 @@ class Vindictive2(Strategy):
         if opp_prev == "D" or opp_last == "D":
             return "D"
         return "C"
-
-    def move_probabilities(self, last_state, state_matrix):
-        move = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if move == "C" else 0.0, "D": 1.0 if move == "D" else 0.0}
-
-

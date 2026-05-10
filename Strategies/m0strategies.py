@@ -15,9 +15,6 @@ class AlwaysDefect(Strategy):
 
     def next_move(self, _, __):
         return "D"
-
-    def move_probabilities(self, _, __):
-        return {"C": 0.0, "D": 1.0}
     
 
 class AlwaysCooperate(Strategy):
@@ -28,9 +25,6 @@ class AlwaysCooperate(Strategy):
 
     def next_move(self, _, __):
         return "C"
-
-    def move_probabilities(self, _, __):
-        return {"C": 1.0, "D": 0.0}
 
 
 class RandomStrategy(Strategy):

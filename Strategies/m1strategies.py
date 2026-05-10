@@ -22,11 +22,6 @@ class TitForTat(Strategy):
         _, opponent_last = state_matrix[last_state[-1]]
         return opponent_last
 
-    def move_probabilities(self, last_state, state_matrix):
-        intended = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if intended == "C" else 0.0, 
-                "D": 1.0 if intended == "D" else 0.0}
-
 class WinStayLoseShift(Strategy):
     def __init__(self):
         self.name = "WinStayLoseShift"
@@ -40,10 +35,6 @@ class WinStayLoseShift(Strategy):
         else:
             return "C" if my_last == "D" else "D"  # lose → shift
 
-    def move_probabilities(self, last_state, state_matrix):
-        intended = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if intended == "C" else 0.0, "D": 1.0 if intended == "D" else 0.0}
-
 
 class ReverseTitForTat(Strategy):
     def __init__(self):
@@ -54,10 +45,6 @@ class ReverseTitForTat(Strategy):
     def next_move(self, last_state, state_matrix):
         _, opponent_last = state_matrix[last_state[-1]]
         return "D" if opponent_last == "C" else "C"
-
-    def move_probabilities(self, last_state, state_matrix):
-        intended = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if intended == "C" else 0.0, "D": 1.0 if intended == "D" else 0.0}
     
 class GrimTrigger(Strategy):
     def __init__(self):
@@ -78,7 +65,3 @@ class GrimTrigger(Strategy):
             self.triggered = True
             return "D"
         return "C"
-
-    def move_probabilities(self, last_state, state_matrix):
-        move = self.next_move(last_state, state_matrix)
-        return {"C": 1.0 if move == "C" else 0.0, "D": 1.0 if move == "D" else 0.0}
