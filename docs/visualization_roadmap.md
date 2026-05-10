@@ -1,9 +1,10 @@
 # Visualization and Interactive Simulation Roadmap
 
-`Dilemma Dynamics` already produces static Matplotlib figures. The next useful
-step is an interactive research interface that makes strategy behavior,
-transition dynamics, noise, and evolutionary takeover easier to inspect without
-turning the simulation core into GUI code.
+`Dilemma Dynamics` already produces static Matplotlib figures for its
+game-theoretic simulations. The next useful step is an interactive research
+interface that makes strategy behavior, transition dynamics, noise, and
+evolutionary takeover easier to inspect without turning the simulation core into
+GUI code.
 
 ## Design Principle
 

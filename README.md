@@ -1,16 +1,16 @@
 # Dilemma Dynamics
 
-## A Computational Research Framework for Evolutionary Cooperation
+## A Game-Theoretic Computational Framework for Evolutionary Cooperation
 
 **Author: Joshua Chua Han Wei**
 
 ---
 
-`Dilemma Dynamics` studies strategy selection, memory, noise, and cooperative
-takeover in the Iterated Prisoner's Dilemma. The project combines analytical
-Markov-chain evaluation, Monte-Carlo simulation, chromosome-encoded strategies,
-and evolutionary selection experiments into a reproducible local research
-workflow.
+`Dilemma Dynamics` is a game-theory research framework for studying strategy
+selection, memory, noise, and cooperative takeover in the Iterated Prisoner's
+Dilemma. It combines analytical Markov-chain evaluation, Monte-Carlo simulation,
+chromosome-encoded strategies, and evolutionary selection experiments into a
+reproducible local research workflow.
 
 ## 1  Project layout
 
