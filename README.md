@@ -31,7 +31,49 @@ Every package folder contains an `__init__.py`, so imports such as
 
 ---
 
-## 2  Quick-start - reproduce analysis figures
+## 2  Architecture charts
+
+These Mermaid charts show the current structure without adding any new runtime
+dependency. GitHub can render them directly in this README.
+
+### Main code layout
+
+```mermaid
+flowchart TB
+    Scripts["genetic.py / tournamentLean.py / tournament.py"] --> Experiments["Experiments package"]
+    Apps["apps/strategy_tui.py"] --> Simulation["Simulation trace helpers"]
+    Apps --> Registry["Strategy registry"]
+    Experiments --> Game["Game engines"]
+    Simulation --> Game
+    Game --> Strategies["Strategies"]
+    Game --> Markov["Markov transition builders"]
+    Game --> Utils["Payoff and state helpers"]
+    Experiments --> Figures["Tables and Matplotlib figures"]
+    Simulation --> Terminal["Terminal round viewer"]
+```
+
+### Single matchup flow
+
+```mermaid
+flowchart LR
+    Pick["Pick two strategies"] --> Configure["Set rounds, error, trials"]
+    Configure --> Engine{"Choose engine"}
+    Engine --> MarkovGame["MarkovGame"]
+    Engine --> MonteCarloGame["MonteCarloGame"]
+    MarkovGame --> Scores["Expected scores"]
+    MonteCarloGame --> Scores
+    MonteCarloGame --> Trace["Optional round trace"]
+    Trace --> TUI["Terminal view"]
+```
+
+The TUI is enough for checking one game round by round. For bigger questions,
+such as tournament heatmaps or evolutionary takeover over many generations, the
+Matplotlib plots are still more useful. A small Streamlit dashboard would be the
+next step if you want an interactive GUI later.
+
+---
+
+## 3  Quick-start - reproduce analysis figures
 
 ```bash
 # 1) create a fresh environment (Python >= 3.10)
@@ -50,7 +92,7 @@ Figures appear in Matplotlib windows **and** `./figures/`.
 
 ---
 
-## 3  File-by-file guide
+## 4  File-by-file guide
 
 | File | Purpose | Typical runtime |
 | --- | --- | --- |
@@ -62,7 +104,7 @@ Figures appear in Matplotlib windows **and** `./figures/`.
 
 ---
 
-## 4  Performance awareness
+## 5  Performance awareness
 
 | Component | Complexity | Design choice and impact |
 | --- | --- | --- |
@@ -73,7 +115,7 @@ Figures appear in Matplotlib windows **and** `./figures/`.
 
 ---
 
-## 5  Running your own matches
+## 6  Running your own matches
 
 ```python
 from Game.game import MarkovGame, MonteCarloGame
@@ -92,13 +134,13 @@ To add a custom strategy, subclass `Strategies.strategy.Strategy` and implement:
 
 ---
 
-## 6  Verification hooks
+## 7  Verification hooks
 
 - `genetic.py` runs `verification_test()` before the main experiment to check population invariance when mu = 0, k = 0.
 - `Utils/test.py` reproduces quick deterministic vs Monte-Carlo pay-off checks in < 2 s.
 - `Test/` contains unittest coverage for Markov dynamics, chromosome conversion, memory strategies, and result symmetry.
 
-## 7  Visualization roadmap
+## 8  Visualization roadmap
 
 See `docs/visualization_roadmap.md` for a proposed path toward an interactive
 research dashboard and round-by-round simulation viewer.
