@@ -100,6 +100,11 @@ To add a custom strategy, subclass `Strategies.strategy.Strategy` and implement:
 - `Utils/test.py` reproduces quick deterministic vs Monte-Carlo pay-off checks in < 2 s.
 - `Test/` contains unittest coverage for Markov dynamics, chromosome conversion, memory strategies, and result symmetry.
 
+## 7  Visualization roadmap
+
+See `docs/visualization_roadmap.md` for a proposed path toward an interactive
+research dashboard and round-by-round simulation viewer.
+
 ---
 
 This framework is intended for reproducible computational experiments in
