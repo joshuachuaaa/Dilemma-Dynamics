@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: Strategies/strategy.py
 # Purpose: Abstract base class for all IPD strategies.
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 
 
 
@@ -38,13 +38,13 @@ class Strategy:
         Enumerate all 4**m possible histories of length m (using gamestates.states)
         and call next_move() on each to build a 0/1 bitstring.  Each history is
         reset independently, so strategies with internal flags (like GrimTrigger)
-        don’t carry state from one history to the next.
+        don't carry state from one history to the next.
         """
         m = self.memory_size
         if m < 1:
-            raise ValueError(f"{self.name}: memory_size must be ≥ 1 to extract a bitstring.")
+            raise ValueError(f"{self.name}: memory_size must be >= 1 to extract a bitstring.")
 
-        # All length-m tuples of the state‐strings, e.g. ("CC","DD") for m=2
+        # All length-m tuples of the state-strings, e.g. ("CC","DD") for m=2
         all_histories = list(product(states, repeat=m))
 
         bits = []

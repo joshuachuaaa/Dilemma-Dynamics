@@ -4,13 +4,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from Game.game import MarkovGame, MonteCarloGame
 
-# Memory‐0 strategies
+# Memory-0 strategies
 from Strategies.m0strategies import AlwaysCooperate, AlwaysDefect, RandomStrategy
 
-# Memory‐1 strategies
+# Memory-1 strategies
 from Strategies.m1strategies import TitForTat, WinStayLoseShift, ReverseTitForTat
 
-# Memory‐2 strategies
+# Memory-2 strategies
 from Strategies.m2strategies import (
     TitForTwoTats,
     ClearGrudger,
@@ -56,7 +56,7 @@ def run_matchup(strat1, strat2):
         m_p1, m_p2, _ = markov_game.run()
         markov_game.printResults()
     except Exception as e:
-        print(f"❌ Markov calculation failed: {e}")
+        print(f" Markov calculation failed: {e}")
         return
 
     # Run Monte Carlo Game
@@ -66,18 +66,18 @@ def run_matchup(strat1, strat2):
         print(f"{strat1.name} Monte Carlo avg over {trials} trials: {mc_p1:.2f}")
         print(f"{strat2.name} Monte Carlo avg over {trials} trials: {mc_p2:.2f}")
     except Exception as e:
-        print(f"❌ Monte Carlo simulation failed: {e}")
+        print(f" Monte Carlo simulation failed: {e}")
         return
 
     # Compare results
     diff_p1 = abs(mc_p1 - m_p1)
     diff_p2 = abs(mc_p2 - m_p2)
-    print(f"Difference → {strat1.name}: {diff_p1:.4f}, {strat2.name}: {diff_p2:.4f}")
+    print(f"Difference -> {strat1.name}: {diff_p1:.4f}, {strat2.name}: {diff_p2:.4f}")
 
     if diff_p1 > tolerance or diff_p2 > tolerance:
-        print("❌ WARNING: Monte Carlo and Markov results differ significantly!")
+        print(" WARNING: Monte Carlo and Markov results differ significantly!")
     else:
-        print("✅ Check passed: Monte Carlo matches Markov within tolerance.")
+        print(" Check passed: Monte Carlo matches Markov within tolerance.")
 
 
 # 1. Memory-2 vs Memory-0

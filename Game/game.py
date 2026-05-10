@@ -1,9 +1,9 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # File: Game/game.py
 # Author: Joshua Chua Han Wei
-# Purpose: Core engines for the IPD – deterministic MarkovGame
+# Purpose: Core engines for the IPD: deterministic MarkovGame
 #          and MonteCarloGame (with trembling-hand error support).
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 
 import numpy as np
 import random
@@ -52,12 +52,12 @@ class MarkovGame:
             if self.max_memory == 1:
                 initial_state = initial_state
             else:
-                # Replicate a single string into a max_memory‐tuple, e.g. "CC" → ("CC","CC")
+                # Replicate a single string into a max_memory tuple, e.g. "CC" -> ("CC","CC")
                 initial_state = tuple([initial_state] * self.max_memory)
 
         # Now validate and build the initial_distribution
         if self.max_memory == 1:
-            # For memory‐1, states is ["CC","CD","DC","DD"]
+            # For memory-1, states is ["CC","CD","DC","DD"]
             if not isinstance(initial_state, str):
                 raise ValueError(
                     f"Memory-1 game requires initial_state to be a string, e.g. 'CC'. "

@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # File   : Strategies/chromosomes.py
 # Author: Joshua Chua Han Wei
-# Purpose: Bit-string / genetic “chromosome” strategy wrapper (variable memory)
-# ──────────────────────────────────────────────────────────
+# Purpose: Bit-string / genetic "chromosome" strategy wrapper (variable memory)
+# ----------------------------------------------------------
 
 import math
 from itertools import product
@@ -13,8 +13,8 @@ from Strategies.strategy import Strategy
 class ChromosomeStrategy(Strategy):
     """
     Strategy encoded as a bit-string of length 4**m.
-    Bit 0 → 'C', 1 → 'D'.  The index is determined by the last-m outcomes
-    (each outcome ∈ {"CC","CD","DC","DD"}).
+    Bit 0 means 'C', 1 means 'D'. The index is determined by the last-m outcomes
+    (each outcome in {"CC","CD","DC","DD"}).
     """
 
     # ------------------------------------------------------------------ #
@@ -42,10 +42,10 @@ class ChromosomeStrategy(Strategy):
         # 3) build lookup table
         self.lookup_table = ["C" if bit == 0 else "D" for bit in chromosome]
 
-        # 4) pre-compute mapping: history tuple → index
+        # 4) pre-compute mapping: history tuple to index
         self.history_to_index = {}
         for idx, hist in enumerate(product(states, repeat=self.memory_size)):
-            # hist ('CC','DC',…) → (('C','C'),('D','C'),…)
+            # hist ('CC','DC',...) -> (('C','C'),('D','C'),...)
             key = tuple((s[0], s[1]) for s in hist)
             self.history_to_index[key] = idx
 
@@ -56,10 +56,10 @@ class ChromosomeStrategy(Strategy):
         """
         Accepts `last_state` in any of these forms:
 
-        • "CC"                               — outcome string
-        • ("CC","DC",…)                      — tuple/list of outcome strings
-        • (('C','C'),('D','C'),…)            — tuple of char-pairs
-        • ('C','D') when m == 1              — two single-char strings
+        - "CC": outcome string
+        - ("CC","DC",...): tuple/list of outcome strings
+        - (('C','C'),('D','C'),...): tuple of char-pairs
+        - ('C','D') when m == 1: two single-char strings
         """
 
         # 1) convert to flat tuple  `seq`
@@ -69,7 +69,7 @@ class ChromosomeStrategy(Strategy):
         elif (isinstance(last_state, (list, tuple))
               and len(last_state) == 2
               and all(isinstance(x, str) and len(x) == 1 for x in last_state)):
-            # memory-1 special case: ('C','D') → ('CD',)
+            # memory-1 special case: ('C','D') -> ('CD',)
             seq = ("".join(last_state),)
 
         elif (isinstance(last_state, (list, tuple))

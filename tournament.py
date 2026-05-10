@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: tournament.py
 # Purpose: Full round-robin strategy analysis with optional heat-maps / rankings.
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 from Utils.save_figure import save_fig
 from Utils.random_seed import set_seed
 import pandas as pd
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     print(df_mc_err.round(2))
 
     # ------------------------------------------------------------------
-    # 5) Compare Markov vs Monte Carlo for memory‐3 strategies
+    # 5) Compare Markov vs Monte Carlo for memory-3 strategies
     # ------------------------------------------------------------------
     mem3_names = [
         s.name for s in competitors if getattr(s, "memory_size", 0) == 3
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     df_mc3 = df_mc_noerr.loc[mem3_names, mem3_names]
     diff_mem3 = df_mk3 - df_mc3
 
-    print("\n--- Difference (Markov_noerr − MonteCarlo_noerr) for Memory-3 Strategies ---")
+    print("\n--- Difference (Markov_noerr - MonteCarlo_noerr) for Memory-3 Strategies ---")
     print(diff_mem3.round(2))
 
     # ------------------------------------------------------------------
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     print("\n--- Total Monte Carlo Scores (error=0.00), Ranked ---")
     print(ranking_mc.round(1))
 
-    # If you want “average payoff per round” instead of cumulative, divide by ROUNDS:
+    # If you want "average payoff per round" instead of cumulative, divide by ROUNDS:
     avg_per_round_markov = ranking_markov / ROUNDS
     avg_per_round_mc = ranking_mc / ROUNDS
 
@@ -107,13 +107,13 @@ if __name__ == "__main__":
 
 
     # ==============================================================================
-    # 8) HORIZONTAL  BAR CHART OF TOTAL SCORES (COLOR‐CODED BY niceness)
+    # 8) HORIZONTAL  BAR CHART OF TOTAL SCORES (COLOR-CODED BY niceness)
     # ==============================================================================
 
-    # 8a) Calculate total‐score Series (sum over rows of df_markov_noerr)
+    # 8a) Calculate total-score Series (sum over rows of df_markov_noerr)
     total_scores = df_markov_noerr.sum(axis=1)
 
-    # 8b) Build quick lookups for each strategy’s is_nice and memory_size
+    # 8b) Build quick lookups for each strategy's is_nice and memory_size
     name_to_nice = {s.name: s.is_nice for s in competitors}
     name_to_memory = {s.name: s.memory_size for s in competitors}
 
@@ -127,13 +127,13 @@ if __name__ == "__main__":
     plt.figure(figsize=(8, 6))
     plt.barh(sorted_scores.index, sorted_scores.values, color=colors)
     plt.xlabel("Total Cumulative Score")
-    plt.title("Total Strategy Scores (Markov, no error)\n(Green = Cooperative – Red = Exploitative)")
+    plt.title("Total Strategy Scores (Markov, no error)\nGreen = Cooperative; Red = Exploitative")
     plt.tight_layout()
     save_fig("Total_tournament_scores.png", dpi=300, show=True)
 
 
     # ==============================================================================
-    # 9) BOXPLOT OF “AVERAGE SCORE PER ROUND” GROUPED BY memory_size
+    # 9) BOXPLOT OF "AVERAGE SCORE PER ROUND" GROUPED BY memory_size
     # ==============================================================================
 
     # 9a) Create a small DataFrame with one row per strategy
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         "is_nice": [name_to_nice[name] for name in total_scores.index],
     })
 
-    # 9b) Boxplot: average‐per‐round distributions by memory size
+    # 9b) Boxplot: average-per-round distributions by memory size
     plt.figure(figsize=(8, 6))
     stats_df.boxplot(column="avg_per_round", by="memory_size")
     plt.xlabel("Memory Size (m)")
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     # 10) FURTHER ANALYSIS
     # ------------------------------------------------------------------
-    # For instance, you could also compare “nice” vs “not nice” average distributions:
+    # For instance, you could also compare "nice" vs "not nice" average distributions:
     #
     plt.figure(figsize=(6, 4))
     stats_df.boxplot(column="avg_per_round", by="is_nice")

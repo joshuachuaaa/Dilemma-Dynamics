@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: Strategies/m3strategies.py
-# Purpose: Memory-3 strategies – Pavlov3, Generous3, Three-Grudger, etc.
-# ──────────────────────────────────────────────────────────
+# Purpose: Memory-3 strategies: Pavlov3, Generous3, Three-Grudger, etc.
+# ----------------------------------------------------------
 
 
 from Strategies.strategy import Strategy
@@ -17,7 +17,7 @@ class TitForThreeTats(Strategy):
 
     def next_move(self, last_state, state_matrix):
         a, b, c = last_state[-3:]
-        # get opponent’s moves:
+        # get opponent's moves:
         _, opp_a = state_matrix[a]
         _, opp_b = state_matrix[b]
         _, opp_c = state_matrix[c]
@@ -94,11 +94,11 @@ class Pavlov3(Strategy):
         my_b, opp_b = state_matrix[b]
         my_c, opp_c = state_matrix[c]
 
-        # All three rounds were (C,C)?  Stay “C.”
+        # All three rounds were (C,C)?  Stay "C."
         if my_a == "C" and opp_a == "C" and my_b == "C" and opp_b == "C" and my_c == "C" and opp_c == "C":
             return "C"
 
-        # All three were (D,D)?  Stay “D.”
+        # All three were (D,D)?  Stay "D."
         if my_a == "D" and opp_a == "D" and my_b == "D" and opp_b == "D" and my_c == "D" and opp_c == "D":
             return "D"
 

@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: Strategies/m0strategies.py
-# Purpose: Memory-0 (stateless) strategies – Always-C, Always-D, Random.
-# ──────────────────────────────────────────────────────────
+# Purpose: Memory-0 (stateless) strategies: Always-C, Always-D, Random.
+# ----------------------------------------------------------
 
 
 from Strategies.strategy import Strategy

@@ -143,7 +143,7 @@ class TestGameSymmetryFull(unittest.TestCase):
                 game_ji = MonteCarloGame(strat_j, strat_i, rounds=rounds, trials=trials, error=error)
                 score_j_ji, score_i_ji = game_ji.run()
 
-                # Assert approximate symmetry (within sampling‐noise tolerance)
+                # Assert approximate symmetry (within sampling-noise tolerance)
                 self.assertAlmostEqual(
                     score_i_ij, score_i_ji, delta=self.mc_tol,
                     msg=f"Monte Carlo symmetry failed for {strat_i.name} vs {strat_j.name}: "

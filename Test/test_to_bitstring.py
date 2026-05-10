@@ -22,7 +22,7 @@ from Strategies.chromosomes  import ChromosomeStrategy
 class TestToBitstringMemory1(unittest.TestCase):
     def test_tit_for_tat(self):
         bits = TitForTat().to_bitstring()
-        # ["CC","CD","DC","DD"] → [0,1,0,1]
+        # ["CC","CD","DC","DD"] -> [0,1,0,1]
         self.assertEqual(bits, [0, 1, 0, 1])
 
     def test_win_stay_lose_shift(self):
@@ -35,7 +35,7 @@ class TestToBitstringMemory1(unittest.TestCase):
 
     def test_grim_trigger(self):
         bits = GrimTrigger().to_bitstring()
-        # Each history is fresh → [0,1,0,1]
+        # Each history is fresh -> [0,1,0,1]
         self.assertEqual(bits, [0, 1, 0, 1])
 
     def test_invalid_memory_0(self):
@@ -52,7 +52,7 @@ class TestToBitstringMemory1(unittest.TestCase):
 
 class TestToBitstringMemory2(unittest.TestCase):
     def setUp(self):
-        # histories of state‐strings for m=2
+        # histories of state-strings for m=2
         self.histories = list(product(states, repeat=2))
 
     def test_length_16(self):

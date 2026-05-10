@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: test.py
-# Purpose: Quick sanity script – three sample match-ups using MarkovGame.
-# ──────────────────────────────────────────────────────────
+# Purpose: Quick sanity script: three sample match-ups using MarkovGame.
+# ----------------------------------------------------------
 
 import numpy as np
 from Game.game import MarkovGame, MonteCarloGame
@@ -24,26 +24,26 @@ error = 0.0
 # TitForTat vs Random
 markov_game = MarkovGame(s1, s3, rounds=rounds, error=error)
 score1, score3, _ = markov_game.run()
-print(f"TitForTat vs RandomStrategy → TFT: {score1:.2f}, Random: {score3:.2f}")
+print(f"TitForTat vs RandomStrategy -> TFT: {score1:.2f}, Random: {score3:.2f}")
 
 # AD vs Random
 markov_game = MarkovGame(s2, s3, rounds=rounds, error=error)
 score2, score3, _ = markov_game.run()
-print(f"AlwaysDefect vs RandomStrategy → TFT: {score2:.2f}, Random: {score3:.2f}")
+print(f"AlwaysDefect vs RandomStrategy -> TFT: {score2:.2f}, Random: {score3:.2f}")
 
 # TitForTat vs AlwaysDefect
 markov_game = MarkovGame(s1, s2, rounds=rounds, error=error)
 score1, score2, _ = markov_game.run()
-print(f"TitForTat vs AlwaysDefect → TFT: {score1:.2f}, AD: {score2:.2f}")
+print(f"TitForTat vs AlwaysDefect -> TFT: {score1:.2f}, AD: {score2:.2f}")
 
 markov_game = MarkovGame(s2,s1, rounds=rounds, error=error)
 score2, score1, _ = markov_game.run()
-print(f"AlwaysDefect vs TitForTat → TFT: {score2:.2f}, AD: {score1:.2f}")
+print(f"AlwaysDefect vs TitForTat -> TFT: {score2:.2f}, AD: {score1:.2f}")
 
 # TitForTat vs Random again
 markov_game = MarkovGame(s1, s3, rounds=rounds, error=error)
 score1, score3, _ = markov_game.run()
-print(f"TitForTat vs RandomStrategy → TFT: {score1:.2f}, Random: {score3:.2f}")
+print(f"TitForTat vs RandomStrategy -> TFT: {score1:.2f}, Random: {score3:.2f}")
 
 
 
@@ -103,4 +103,3 @@ if __name__ == "__main__":
     df_mc = run_tournament(competitors, engine_type="montecarlo", rounds=50, trials=5000, error=0.0)
     # print("\n--- Monte Carlo Tournament (error=0.00) ---")
     # print(df_mc.round(2))
-

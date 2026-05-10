@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: gamestates.py
 # Purpose: Global definitions of outcome strings and helper lookup tables.
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 
 states = ["CC", "CD", "DC", "DD"]
 state_to_last_moves = {

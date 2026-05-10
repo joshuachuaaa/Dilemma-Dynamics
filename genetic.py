@@ -1,27 +1,26 @@
 
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: genetic.py
-# Purpose: Evolutionary cooperation study for the IPD – trunc vs proportional
+# Purpose: Evolutionary cooperation study for the IPD: trunc vs proportional
 #          selection, plots, statistics, and built-in verification test.
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 """
 genetic.py
-────────────────────────────────────────────────────────────────────────────
+----------------------------------------------------------------------------
 Evolutionary Iterated Prisoner's Dilemma (IPD) study of cooperative takeover
 under competing selection regimes and mutation.
 
-• 15 replicates × 8 variants (rule ∈ {trunc, prop} × k ∈ {1–4})
-• Mean fitness trajectory       (mechanistic insight)
-• Hazard function of takeover   (tempo analysis)
-• Fixation bars ±95 % Wilson CI (sampling error)
-• Statistical tests & logistic regression (significance + effect size)
-• Sanity test: μ = 0, k = POP_SIZE fixes initial cooperators (verification)
-• Optional robustness sweeps: larger N, alt μ
+- 15 replicates x 8 variants (rule in {trunc, prop}, k in {1, 2, 3, 4})
+- Mean fitness trajectory
+- Hazard function of takeover
+- Fixation bars with 95 percent Wilson CI
+- Sanity test: mutation = 0, k = POP_SIZE fixes initial cooperators
+- Optional robustness sweeps: larger N and alternate mutation rate
 
 """
 
-# ─────────────────── imports ──────────────────────────────────────────────
+# ------------------- imports ----------------------------------------------
 from Utils.save_figure import save_fig
 from Utils.random_seed import set_seed
 import random, itertools, time, math
@@ -45,7 +44,7 @@ from Strategies.m2strategies import (
 from Strategies.chromosomes import ChromosomeStrategy
 from Experiments.tournament_runner import run_tournament
 
-# ─────────────────── hyper-parameters ─────────────────────────────────────
+# ------------------- hyper-parameters -------------------------------------
 set_seed()
 GENERATIONS   = 20
 TRIALS        = 1_000
@@ -61,7 +60,7 @@ MU            = 1.0 / (4 ** TitForTat().memory_size)
 # robustness flags (toggle as needed)
 RUN_SENSITIVITY_N  = False   # larger population (N = 16)
 RUN_SENSITIVITY_MU = False   # double mutation rate
-# ────────────────── helper utilities ──────────────────────────────────────
+# ------------------ helper utilities --------------------------------------
 def wilson(successes: int, n: int, conf: float = 0.95) -> tuple[float, float]:
     """Wilson score CI for a proportion."""
     if smp:  # use library if available
@@ -103,9 +102,9 @@ def one_run(rule: str, k: int, rep_id: int,
             pop_size: int = POP_SIZE, mu: float = MU) -> dict:
     """
     Execute one replicate of the evolutionary IPD.
-    rule ∈ {'trunc','prop'}   — selection regime
-    k    ∈ {1–4,…}            — elite-slot size
-    rep_id                    — unique RNG seed offset
+    rule in {'trunc','prop'}: selection regime
+    k: elite-slot size
+    rep_id: unique RNG seed offset
     Returns keys: history, mean_fitness, fix (bool), t_major (float/NaN)
     """
     random.seed(RAND_SEED + 1000 * rep_id)
@@ -150,20 +149,20 @@ def one_run(rule: str, k: int, rep_id: int,
     return dict(rule=rule, k=k, history=history, mean_fitness=mean_fitness,
                 fix=fixation, t_major=t_major)
 
-# ───────────────── verification sanity test (patched) ─────────────────────
+# ----------------- verification sanity test (patched) ---------------------
 def verification_test():
     """
-    Sanity check: with μ = 0 and truncation k = 0
+    Sanity check: with mu = 0 and truncation k = 0
     (i.e. no elite cloning) the population composition must remain invariant.
     """
-    print("\n=== Verification sanity test: invariance under μ=0, k=0 ===")
+    print("\n=== Verification sanity test: invariance under mu=0, k=0 ===")
     res = one_run("trunc", 0, rep_id=99999, mu=0.0)   # <-- k = 0
     initial_nice = SEED_STATE[0]
     final_nice   = res["history"][-1]
     assert final_nice == initial_nice, (
         f"Expected {initial_nice} nice at G20, got {final_nice}"
     )
-    print(f"PASS — nice count remained {initial_nice} for all 20 generations\n")
+    print(f"PASS - nice count remained {initial_nice} for all 20 generations\n")
 
 def run_experiment() -> pd.DataFrame:
     """Run the main evolutionary experiment and return replicate records."""
@@ -196,7 +195,7 @@ def plot_results(df: pd.DataFrame) -> None:
             plt.plot(gens, mean, linestyle=style, color=col, label=f"{rule} k={k}")
             plt.fill_between(gens, mean - sd, mean + sd, color=col, alpha=0.15)
     plt.xlabel("Generation")
-    plt.ylabel("# Cooperative agents  (mean ±1 SD)")
+    plt.ylabel("# Cooperative agents  (mean +/-1 SD)")
     plt.title("Evolution of cooperation under selection pressure")
     plt.legend(ncol=2, fontsize="small")
     plt.tight_layout()
@@ -238,7 +237,7 @@ def plot_results(df: pd.DataFrame) -> None:
             fmt="none", capsize=4, elinewidth=1
         )
     plt.xticks(x, x)
-    plt.ylabel("Fixation probability  (±95 % CI)")
+    plt.ylabel("Fixation probability  (+/-95 % CI)")
     plt.title("Elite-slot size k vs cooperative takeover")
     plt.legend()
     plt.tight_layout()

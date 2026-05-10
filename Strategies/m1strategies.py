@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: Strategies/m1strategies.py
-# Purpose: Memory-1 strategies – Tit-for-Tat, WSLS, Reverse-TFT, Grim.
-# ──────────────────────────────────────────────────────────
+# Purpose: Memory-1 strategies: Tit-for-Tat, WSLS, Reverse-TFT, Grim.
+# ----------------------------------------------------------
 
 
 
@@ -31,9 +31,9 @@ class WinStayLoseShift(Strategy):
     def next_move(self, last_state, state_matrix):
         my_last, opp_last = state_matrix[last_state[-1]]
         if my_last == opp_last:
-            return my_last  # win → stay
+            return my_last  # win: stay
         else:
-            return "C" if my_last == "D" else "D"  # lose → shift
+            return "C" if my_last == "D" else "D"  # lose: shift
 
 
 class ReverseTitForTat(Strategy):

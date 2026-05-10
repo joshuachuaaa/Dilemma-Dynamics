@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: Strategies/m2Strategies.py
-# Purpose: Memory-2 strategies – Tf2T, Pavlov2, generous / suspicious variants.
-# ──────────────────────────────────────────────────────────
+# Purpose: Memory-2 strategies: Tf2T, Pavlov2, generous / suspicious variants.
+# ----------------------------------------------------------
 
 
 # ============================
@@ -93,7 +93,7 @@ class SuspiciousTf2T(Strategy):
     def next_move(self, last_state, state_matrix):
         prev, last = last_state[-2], last_state[-1]
         if prev == "CC" and last == "CC":
-            # both were CC in rounds t-2 and t-1 → launch a D probe
+            # both were CC in rounds t-2 and t-1, so launch a D probe
             return "D"
         # otherwise, revert to normal Tf2T:
         _, opp_prev = state_matrix[prev]

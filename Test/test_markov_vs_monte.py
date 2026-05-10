@@ -43,9 +43,9 @@ for strat1, strat2 in strategy_pairs:
     diff_p1 = abs(mc_p1 - markov_p1)
     diff_p2 = abs(mc_p2 - markov_p2)
 
-    print(f"Difference → {strat1.name}: {diff_p1:.4f}, {strat2.name}: {diff_p2:.4f}")
+    print(f"Difference -> {strat1.name}: {diff_p1:.4f}, {strat2.name}: {diff_p2:.4f}")
 
     if diff_p1 > tolerance or diff_p2 > tolerance:
-        print("❌ WARNING: Monte Carlo and Markov results differ significantly!\n")
+        print(" WARNING: Monte Carlo and Markov results differ significantly!\n")
     else:
-        print("✅ Check passed: Monte Carlo matches Markov expected values within tolerance.\n")
+        print(" Check passed: Monte Carlo matches Markov expected values within tolerance.\n")

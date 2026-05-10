@@ -1,8 +1,8 @@
-# ──────────────────────────────────────────────────────────
+# ----------------------------------------------------------
 # Author: Joshua Chua Han Wei
 # File: payoff_matrix.py      
-# Purpose: Prisoner’s Dilemma payoff dictionary {(CC/CD/DC/DD): (p1,p2)}.
-# ──────────────────────────────────────────────────────────
+# Purpose: Prisoner's Dilemma payoff dictionary {(CC/CD/DC/DD): (p1,p2)}.
+# ----------------------------------------------------------
 
 # Define Points (payoff matrix)
 payoff_matrix = {

@@ -12,11 +12,11 @@ Keep the architecture layered:
 
 ```text
 Strategies / Game / Markov
-        ↓
+        v
 Experiments
-        ↓
+        v
 Analysis and visualization
-        ↓
+        v
 Optional GUI
 ```
 
