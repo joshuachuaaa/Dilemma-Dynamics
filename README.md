@@ -57,7 +57,7 @@ Figures appear in Matplotlib windows **and** `./figures/`.
 
 | File                | Purpose                                                                                                                                                                                          | Typical runtime |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `genetic.py`        | 15 replicates × 8 variants (trunc/proportional × k = 1‑4). Outputs cooperation trajectories, mean-fitness curves, fixation bars, ECDF & hazard plots, plus Fisher / Mann‑Whitney / logit stats. | ≈ 75 s          |
+| `genetic.py`        | 15 replicates × 8 variants (trunc/proportional × k = 1‑4). Outputs cooperation trajectories, mean-fitness curves, fixation bars, ECDF & hazard plots with Wilson confidence intervals.          | ≈ 75 s          |
 | `tournamentLean.py` | Monte-Carlo sweep over ε ∈ {0 %, 5 %, 10 %}. Produces performance lines, memory-size box-plots, cooperative-vs-exploitative plots, global μ ± σ and class-gap shrinkage.                         | ≈ 60 s          |
 | `tournament.py`     | Full round-robin analysis for strategy comparison; optional heat-maps and rankings.                                                                                                              | 20 – 120 s      |
 | `Utils/test.py`     | Tiny sanity check for sample deterministic vs Monte-Carlo pay-offs.                                                                                                                              | < 2 s           |

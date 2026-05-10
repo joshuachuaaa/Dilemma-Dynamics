@@ -28,13 +28,11 @@ import random, itertools, time, math
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import scipy.stats as ss                # Fisher, Mann-Whitney, norm.ppf
+import scipy.stats as ss                # norm.ppf fallback for Wilson CI
 try:
     import statsmodels.stats.proportion as smp
-    import statsmodels.formula.api as smf
 except ModuleNotFoundError:
     smp = None                          # fallback Wilson impl provided
-                                        # logistic regression skipped if absent
 
 from Utils.gamestates import state_to_last_moves
 from Strategies.m1strategies import (
@@ -45,7 +43,7 @@ from Strategies.m2strategies import (
     Prober, Grim2, GenerousTwoTitForTwo
 )
 from Strategies.chromosomes import ChromosomeStrategy
-from tournament import run_tournament
+from Experiments.tournament_runner import run_tournament
 
 # ─────────────────── hyper-parameters ─────────────────────────────────────
 set_seed()
@@ -76,7 +74,7 @@ def wilson(successes: int, n: int, conf: float = 0.95) -> tuple[float, float]:
     return (centre - delta) / denom, (centre + delta) / denom
 
 def mutate(parent: ChromosomeStrategy, mu: float = MU) -> ChromosomeStrategy:
-    """Bit-flip mutate a parent ChromosomeStrategy → child, preserve niceness."""
+    """Bit-flip mutate a parent chromosome and preserve cooperation metadata."""
     bits = parent.to_bitstring()
     for i in range(len(bits)):
         if random.random() < mu:
@@ -166,143 +164,124 @@ def verification_test():
         f"Expected {initial_nice} nice at G20, got {final_nice}"
     )
     print(f"PASS — nice count remained {initial_nice} for all 20 generations\n")
-verification_test()
-# ───────────────────── main experiment (POP_SIZE = 8) ─────────────────────
-results = []
-for rule, k in itertools.product(["trunc", "prop"], [1, 2, 3, 4]):
-    print(f"\n### Running variant: {rule.upper()}  k={k}  "
-          f"({N_REPS} replicates) ###")
-    t0 = time.time()
-    for r in range(1, N_REPS + 1):
-        res = one_run(rule, k,
-                      rep_id=10_000 * k + (0 if rule == "trunc" else 500) + r)
-        results.append(res)
-    print(f"### Variant finished in {time.time() - t0:5.1f} s ###")
 
-df = pd.DataFrame(results)
+def run_experiment() -> pd.DataFrame:
+    """Run the main evolutionary experiment and return replicate records."""
+    results = []
+    for rule, k in itertools.product(["trunc", "prop"], [1, 2, 3, 4]):
+        print(f"\n### Running variant: {rule.upper()}  k={k}  "
+              f"({N_REPS} replicates) ###")
+        t0 = time.time()
+        for r in range(1, N_REPS + 1):
+            res = one_run(
+                rule,
+                k,
+                rep_id=10_000 * k + (0 if rule == "trunc" else 500) + r,
+            )
+            results.append(res)
+        print(f"### Variant finished in {time.time() - t0:5.1f} s ###")
+    return pd.DataFrame(results)
 
-# ───────────────────────── visualisations ─────────────────────────────────
-plt.rcParams["axes.prop_cycle"] = plt.cycler(color=plt.cm.tab10.colors)
 
-# Fig 1 — diplomacy fraction (mean ± SD)
-plt.figure(figsize=(9, 5))
-for rule, style in [("trunc", "-"), ("prop", "--")]:
-    for k, col in zip([1, 2, 3, 4], plt.cm.tab10.colors):
-        hist = np.vstack(df[(df.rule == rule) & (df.k == k)].history)
-        mean, sd = hist.mean(axis=0), hist.std(axis=0)
-        gens = np.arange(1, GENERATIONS + 1)
-        plt.plot(gens, mean, linestyle=style, color=col, label=f"{rule} k={k}")
-        plt.fill_between(gens, mean - sd, mean + sd, color=col, alpha=0.15)
-plt.xlabel("Generation")
-plt.ylabel("# Cooperative agents  (mean ±1 SD)")
-plt.title("Evolution of cooperation under selection pressure")
-plt.legend(ncol=2, fontsize="small")
-plt.tight_layout()
-save_fig("G1_diplomacy_fraction.png", dpi=300, show=True)
+def plot_results(df: pd.DataFrame) -> None:
+    """Render and persist the standard evolutionary analysis figures."""
+    plt.rcParams["axes.prop_cycle"] = plt.cycler(color=plt.cm.tab10.colors)
 
-# Fig 2 — mean fitness curves (mechanistic insight)
-plt.figure(figsize=(7, 4))
-for rule, style in [("trunc", "-"), ("prop", "--")]:
-    for k, col in zip([2, 3], ["C0", "C1"]):           # focus on key k
-        mf = np.vstack(df[(df.rule == rule) & (df.k == k)].mean_fitness)
-        plt.plot(np.arange(1, GENERATIONS + 1), mf.mean(axis=0),
-                 linestyle=style, color=col, label=f"{rule} k={k}")
-plt.xlabel("Generation")
-plt.ylabel("Mean population pay-off")
-plt.title("Fitness ascent under competing selection rules")
-plt.legend(); plt.tight_layout()
-save_fig("G2_mean_fitness.png", dpi=300, show=True)
+    plt.figure(figsize=(9, 5))
+    for rule, style in [("trunc", "-"), ("prop", "--")]:
+        for k, col in zip([1, 2, 3, 4], plt.cm.tab10.colors):
+            hist = np.vstack(df[(df.rule == rule) & (df.k == k)].history)
+            mean, sd = hist.mean(axis=0), hist.std(axis=0)
+            gens = np.arange(1, GENERATIONS + 1)
+            plt.plot(gens, mean, linestyle=style, color=col, label=f"{rule} k={k}")
+            plt.fill_between(gens, mean - sd, mean + sd, color=col, alpha=0.15)
+    plt.xlabel("Generation")
+    plt.ylabel("# Cooperative agents  (mean ±1 SD)")
+    plt.title("Evolution of cooperation under selection pressure")
+    plt.legend(ncol=2, fontsize="small")
+    plt.tight_layout()
+    save_fig("G1_cooperation_trajectory.png", dpi=300, show=True)
 
-# Fixation bars ±95 % CI
-agg = (df.groupby(["rule", "k"])["fix"]
-         .agg(successes="sum", trials="count"))
-agg["prop"] = agg.successes / agg.trials
-agg[["ci_lo", "ci_hi"]] = agg.apply(
-    lambda r: wilson(r.successes, r.trials), axis=1, result_type="expand")
+    plt.figure(figsize=(7, 4))
+    for rule, style in [("trunc", "-"), ("prop", "--")]:
+        for k, col in zip([2, 3], ["C0", "C1"]):
+            mf = np.vstack(df[(df.rule == rule) & (df.k == k)].mean_fitness)
+            plt.plot(
+                np.arange(1, GENERATIONS + 1),
+                mf.mean(axis=0),
+                linestyle=style,
+                color=col,
+                label=f"{rule} k={k}",
+            )
+    plt.xlabel("Generation")
+    plt.ylabel("Mean population pay-off")
+    plt.title("Fitness ascent under competing selection rules")
+    plt.legend()
+    plt.tight_layout()
+    save_fig("G2_mean_fitness.png", dpi=300, show=True)
 
-plt.figure(figsize=(6, 4))
-rules, x, bw = ["trunc", "prop"], np.arange(1, 5), 0.35
-for i, rule in enumerate(rules):
-    vals  = agg.xs(rule, level=0).prop.values
-    cil, cih = agg.xs(rule, level=0)[["ci_lo", "ci_hi"]].values.T
-    xs = x + i*bw - bw/2
-    plt.bar(xs, vals, bw, label=rule)
-    plt.errorbar(xs, vals, yerr=[vals - cil, cih - vals],
-                 fmt='none', capsize=4, elinewidth=1)
-plt.xticks(x, x)
-plt.ylabel("Fixation probability  (±95 % CI)")
-plt.title("Elite-slot size k vs cooperative takeover")
-plt.legend(); plt.tight_layout()
-save_fig("G3_fixation_bars.png", dpi=300, show=True)
+    agg = df.groupby(["rule", "k"])["fix"].agg(successes="sum", trials="count")
+    agg["prop"] = agg.successes / agg.trials
+    agg[["ci_lo", "ci_hi"]] = agg.apply(
+        lambda r: wilson(r.successes, r.trials), axis=1, result_type="expand"
+    )
 
-# Fig 3 — ECDF & hazard of takeover time
-plt.figure(figsize=(6, 4))
-linemap = {("trunc", 2): "-", ("prop", 2): "--"}
-for (rule, k), style in linemap.items():
-    times = (df[(df.rule == rule) & (df.k == k)].t_major
-               .dropna().sort_values())
-    if times.empty:  continue
-    y = np.arange(1, len(times) + 1) / len(times)
-    plt.step(times, y, where="post", linestyle=style, label=f"{rule} k={k}")
-plt.xlabel("Generation of first ≥5 diplomats")
-plt.ylabel("ECDF")
-plt.title("Speed of majority takeover")
-plt.legend(); plt.tight_layout()
-save_fig("G4_ecdf_takeover.png", dpi=300, show=True)
+    plt.figure(figsize=(6, 4))
+    rules, x, bw = ["trunc", "prop"], np.arange(1, 5), 0.35
+    for i, rule in enumerate(rules):
+        vals = agg.xs(rule, level=0).prop.values
+        cil, cih = agg.xs(rule, level=0)[["ci_lo", "ci_hi"]].values.T
+        xs = x + i * bw - bw / 2
+        plt.bar(xs, vals, bw, label=rule)
+        plt.errorbar(
+            xs, vals, yerr=[vals - cil, cih - vals],
+            fmt="none", capsize=4, elinewidth=1
+        )
+    plt.xticks(x, x)
+    plt.ylabel("Fixation probability  (±95 % CI)")
+    plt.title("Elite-slot size k vs cooperative takeover")
+    plt.legend()
+    plt.tight_layout()
+    save_fig("G3_fixation_bars.png", dpi=300, show=True)
 
-# Hazard plot
-plt.figure(figsize=(6, 4))
-for (rule, k), style in linemap.items():
-    times = df[(df.rule == rule) & (df.k == k)].t_major.dropna()
-    if times.empty: continue
-    counts = np.bincount(times.astype(int), minlength=GENERATIONS + 1)[1:]
-    surv   = counts[::-1].cumsum()[::-1] + counts   # S(t) incl current events
-    hazard = np.where(surv > 0, counts / surv, np.nan)
-    plt.plot(np.arange(1, GENERATIONS + 1), hazard,
-             linestyle=style, marker="o", label=f"{rule} k={k}")
-plt.xlabel("Generation")
-plt.ylabel("Discrete hazard h(t)")
-plt.title("When does takeover happen?")
-plt.legend(); plt.tight_layout(); 
-save_fig("G5_hazard_takeover.png", dpi=300, show=True)
+    plt.figure(figsize=(6, 4))
+    linemap = {("trunc", 2): "-", ("prop", 2): "--"}
+    for (rule, k), style in linemap.items():
+        times = df[(df.rule == rule) & (df.k == k)].t_major.dropna().sort_values()
+        if times.empty:
+            continue
+        y = np.arange(1, len(times) + 1) / len(times)
+        plt.step(times, y, where="post", linestyle=style, label=f"{rule} k={k}")
+    plt.xlabel("Generation of first cooperative majority")
+    plt.ylabel("ECDF")
+    plt.title("Speed of majority takeover")
+    plt.legend()
+    plt.tight_layout()
+    save_fig("G4_ecdf_takeover.png", dpi=300, show=True)
 
-# ───────────────────────── statistical analysis ───────────────────────────
-# Uncomment for statistical analysis
-# summary = (df.groupby(["rule", "k"])
-#              .agg(fix_prob=("fix", "mean"),
-#                   med_t_major=("t_major", "median"))
-#              .round(2))
-# print("\n=== SUMMARY over 15 replicates ===")
-# print(summary, "\n")
+    plt.figure(figsize=(6, 4))
+    for (rule, k), style in linemap.items():
+        times = df[(df.rule == rule) & (df.k == k)].t_major.dropna()
+        if times.empty:
+            continue
+        counts = np.bincount(times.astype(int), minlength=GENERATIONS + 1)[1:]
+        surv = counts[::-1].cumsum()[::-1] + counts
+        hazard = np.where(surv > 0, counts / surv, np.nan)
+        plt.plot(
+            np.arange(1, GENERATIONS + 1),
+            hazard,
+            linestyle=style,
+            marker="o",
+            label=f"{rule} k={k}",
+        )
+    plt.xlabel("Generation")
+    plt.ylabel("Discrete hazard h(t)")
+    plt.title("Takeover timing hazard")
+    plt.legend()
+    plt.tight_layout()
+    save_fig("G5_hazard_takeover.png", dpi=300, show=True)
 
-# # Key contrast: trunc k=2 vs prop k=2
-# trunc2 = df[(df.rule == "trunc") & (df.k == 2)]
-# prop2  = df[(df.rule == "prop")  & (df.k == 2)]
-# table  = [[trunc2.fix.sum(), trunc2.shape[0] - trunc2.fix.sum()],
-#           [prop2.fix.sum(),  prop2.shape[0]  - prop2.fix.sum()]]
-# odds, p_fisher = ss.fisher_exact(table, alternative="greater")
-# U, p_mw = ss.mannwhitneyu(trunc2.t_major.dropna(),
-#                           prop2.t_major.dropna(), alternative="less")
-# rr = trunc2.fix.mean() / prop2.fix.mean() if prop2.fix.mean() > 0 else np.inf
-# med_delta = np.nanmedian(prop2.t_major) - np.nanmedian(trunc2.t_major)
 
-# print("=== Statistical comparison: trunc k=2  vs  prop k=2 ===")
-# print(f"Fixation  09/15 vs 02/15  |  Fisher p={p_fisher:.4f}  "
-#       f"odds={odds:.2f}  RR={rr:.2f}")
-# print(f"Take-over medians  {np.nanmedian(trunc2.t_major):.1f} vs "
-#       f"{np.nanmedian(prop2.t_major):.1f}  |  Mann-Whitney p={p_mw:.4f}  "
-#       f"Δ={med_delta:+.1f} gens\n")
-
-# # Logistic regression (if statsmodels present)
-# if smp:
-#     df_lr = df.replace({"rule": {"trunc": 0, "prop": 1}}).copy()
-#     df_lr["fix"] = df_lr["fix"].astype(int)         
-
-#     mdl = smf.logit("fix ~ C(rule) * k", data=df_lr).fit(disp=False)
-#     print("=== Logistic regression: fix ~ rule * k ===")
-#     print(mdl.summary(xname=["Intercept", "prop", "k", "prop:k"]))
-
-# ───────────────────────── robustness sweeps ──────────────────────────────
 def sweep(pop_size=None, mu=None, tag=""):
     if pop_size is None: pop_size = POP_SIZE
     if mu is None: mu = MU
@@ -315,8 +294,18 @@ def sweep(pop_size=None, mu=None, tag=""):
     print(f"\n=== Robustness {tag} ===")
     print(res.groupby(["rule", "k"]).fix.mean().unstack(0).round(2))
 
-if RUN_SENSITIVITY_N:
-    sweep(pop_size=16, tag="POP_SIZE=16")
 
-if RUN_SENSITIVITY_MU:
-    sweep(mu=MU*2, tag="MU doubled")
+def main() -> None:
+    verification_test()
+    df = run_experiment()
+    plot_results(df)
+
+    if RUN_SENSITIVITY_N:
+        sweep(pop_size=16, tag="POP_SIZE=16")
+
+    if RUN_SENSITIVITY_MU:
+        sweep(mu=MU*2, tag="MU doubled")
+
+
+if __name__ == "__main__":
+    main()

@@ -5,140 +5,16 @@
 # ──────────────────────────────────────────────────────────
 from Utils.save_figure import save_fig
 from Utils.random_seed import set_seed
-import itertools
-import os
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Import your game engines
-from Game.game import MarkovGame, MonteCarloGame
-
-# Import all hand‐coded strategies
-from Strategies.m0strategies import AlwaysCooperate, AlwaysDefect, RandomStrategy
-from Strategies.m1strategies import TitForTat, WinStayLoseShift, ReverseTitForTat, GrimTrigger
-from Strategies.m2strategies import (
-    TitForTwoTats,
-    #ClearGrudger,
-    Pavlov2,
-    GenerousTwoTitForTwo,
-    SuspiciousTf2T,
-    # Prober,
-    # Grim2,
-    # Vindictive2
-)
-from Strategies.m3strategies import (
-    #TitForThreeTats,
-    TwoForgiveOnePunish,
-    ThreeGrudger,
-    PatternFollower3,
-    Pavlov3,
-    Generous3,
-    UnforgivingPatternHunter
-)
-
-# Import Chromosome‐based strategy
-from Strategies.chromosomes import ChromosomeStrategy
-
-# ----------------------------------------------------------------------
-# 1) DEFINE COMPETITOR LIST 
-# ----------------------------------------------------------------------
-competitors = [
-    # Memory‐0 strategies
-    # AlwaysCooperate(),
-    AlwaysDefect(),
-    RandomStrategy(coop_prob=0.5),
-
-    # Memory‐1 strategies
-    TitForTat(),
-    WinStayLoseShift(),
-    ReverseTitForTat(),
-    # GrimTrigger(),
-
-    # Memory‐2 strategies
-    TitForTwoTats(),
-    #ClearGrudger(),
-    Pavlov2(),
-    GenerousTwoTitForTwo(),
-    SuspiciousTf2T(),
-    # Prober(),
-    # Grim2(),
-    # Vindictive2(),
-
-    # Memory‐3 strategies
-    #TitForThreeTats(),
-    TwoForgiveOnePunish(),
-    ThreeGrudger(),
-    PatternFollower3(),
-    Pavlov3(),
-    Generous3(),
-    UnforgivingPatternHunter(),
-
-    # Example Chromosome‐based strategies:
-    # ChromosomeStrategy("01"),       # m=1, equivalent to AlwaysDefect vs. AlwaysCooperate mapping
-    # ChromosomeStrategy("0101"),     # m=1, exactly TitForTat
-]
-
-# ----------------------------------------------------------------------
-# 2) UTILITY: extract "name" from each strategy for labeling
-# ----------------------------------------------------------------------
-set_seed()
-strategy_names = [s.name for s in competitors]
-N = len(competitors)
-# ----------------------------------------------------------------------
-# 3) MAIN TOURNAMENT FUNCTION
-# ----------------------------------------------------------------------
-def run_tournament(
-    competitors,
-    engine_type="markov",
-    rounds=50,
-    trials=10000,
-    error=0.0,
-):
-    """
-    Run a round‐robin tournament over the given list of strategy instances.
-    Skip self‐matches and avoid redundant matches by only iterating i < j.
-    Fill in a symmetric payoff matrix: payoff[i,j] = payoff_i_vs_j, payoff[j,i] = payoff_j_vs_i.
-    """
-    names = [s.name for s in competitors]
-    N = len(competitors)
-
-    # Initialize two N×N numpy arrays of floats; fill diagonals with np.nan (no self‐play)
-    payoff_matrix = np.full((N, N), np.nan, dtype=float)
-
-    # Loop over all unordered pairs (i < j)
-    for i, j in itertools.combinations(range(N), 2):
-        strat_i = competitors[i]
-        strat_j = competitors[j]
-
-        # Ensure clean state
-        strat_i.reset()
-        strat_j.reset()
-
-        if engine_type.lower() == "markov":
-            game = MarkovGame(strat_i, strat_j, rounds=rounds, error=error)
-            score_i, score_j, _ = game.run()
-        elif engine_type.lower() == "montecarlo":
-            game = MonteCarloGame(
-                strat_i, strat_j, rounds=rounds, trials=trials, error=error
-            )
-            score_i, score_j = game.run()
-        else:
-            raise ValueError(f"Unknown engine_type: {engine_type!r}")
-
-        # Place scores into the payoff_matrix; i vs j → score_i and j vs i → score_j
-        payoff_matrix[i, j] = score_i
-        payoff_matrix[j, i] = score_j
-
-    # Build a pandas DataFrame for convenience
-    df = pd.DataFrame(payoff_matrix, index=names, columns=names)
-    return df
+from Experiments.competitors import default_competitors
+from Experiments.tournament_runner import run_tournament
 
 
-# ----------------------------------------------------------------------
-# 4)  USAGE 
-# ----------------------------------------------------------------------
 if __name__ == "__main__":
+    set_seed()
+    competitors = default_competitors()
     ROUNDS = 50
     TRIALS = 10_000
     ERR_0 = 0.0
