@@ -105,6 +105,12 @@ To add a custom strategy, subclass `Strategies.strategy.Strategy` and implement:
 See `docs/visualization_roadmap.md` for a proposed path toward an interactive
 research dashboard and round-by-round simulation viewer.
 
+For a dependency-free round-by-round trace:
+
+```bash
+python apps/strategy_tui.py --strategy-a TitForTat --strategy-b AlwaysDefect --rounds 12
+```
+
 ---
 
 This framework is intended for reproducible computational experiments in

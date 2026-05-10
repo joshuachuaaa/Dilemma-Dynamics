@@ -25,6 +25,24 @@ not own game rules, payoff logic, strategy behavior, or mutation logic.
 
 ## Candidate Interfaces
 
+### 0. Terminal Simulation Trace
+
+Best fit: standard-library command-line/TUI workflow.
+
+Purpose:
+- Inspect a single matchup round by round.
+- Show the current memory window, intended moves, actual moves, error flips,
+  per-round payoff, and cumulative score.
+- Provide a fast, dependency-free way to explain what the simulation is doing.
+
+Status:
+- `apps/strategy_tui.py` provides this first visualization layer.
+
+Limit:
+- This is enough for understanding a single simulated game, but not enough for
+  comparing many strategies, viewing heatmaps, or exploring evolutionary runs.
+  Those still benefit from Matplotlib figures or a GUI dashboard.
+
 ### 1. Research Dashboard
 
 Best fit: Streamlit or Panel.
