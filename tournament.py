@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: tournament.py
 # Purpose: Full round-robin tournament driver with optional heat-maps / rankings.
 # ──────────────────────────────────────────────────────────

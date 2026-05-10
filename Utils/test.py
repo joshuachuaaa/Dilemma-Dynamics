@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: test.py
 # Purpose: Quick sanity script – three sample match-ups using MarkovGame.
 # ──────────────────────────────────────────────────────────

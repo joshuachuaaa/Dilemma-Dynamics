@@ -1,16 +1,16 @@
 
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: genetic.py
-# Purpose: Evolutionary simulation (Modelling Question 2) – trunc vs proportional
+# Purpose: Evolutionary simulation for the independent IPD study – trunc vs proportional
 #          selection, plots, statistics, and built-in verification test.
 # ──────────────────────────────────────────────────────────
 """
-genetic_batch_progress.py
+genetic.py
 ────────────────────────────────────────────────────────────────────────────
 Evolutionary Iterated Prisoner’s Dilemma (IPD) – “international-relations”
 analogy: each strategy = a ‘country’, C = cooperate/diplomacy, D = aggress.
-Adds depth for FIT3139 Final Report – Modelling Question 2:
+Adds depth to the independent study:
 
 • 15 replicates × 8 variants (rule ∈ {trunc, prop} × k ∈ {1–4})
 • Mean fitness trajectory       (mechanistic insight)

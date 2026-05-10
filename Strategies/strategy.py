@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: Strategies/strategy.py
 # Purpose: Abstract base class for all IPD strategies.
 # ──────────────────────────────────────────────────────────

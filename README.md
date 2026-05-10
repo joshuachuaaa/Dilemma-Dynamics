@@ -1,6 +1,6 @@
 # Iterated-Prisoner’s-Dilemma Toolkit
 
-**Author  Joshua Chua Han Wei — 32781555**
+**Author: Joshua Chua Han Wei**
 
 ---
 
@@ -12,11 +12,12 @@ project_root/
 ├── Game/              # deterministic & Monte-Carlo engines
 ├── Markov/            # transition-matrix builders (m = 1–3)
 ├── Strategies/        # hand-coded & chromosome strategies
+├── Utils/             # payoff, state, plotting, and quick-check helpers
+├── Test/              # unittest coverage for games and strategy encoding
 │
-├── genetic.py         # evolutionary experiment (Modelling Q2)
-├── tournamentLean.py  # noise-sweep experiment (Modelling Q1)
+├── genetic.py         # evolutionary independent-study experiment
+├── tournamentLean.py  # noise-sensitivity independent-study experiment
 ├── tournament.py      # full round-robin driver (exploration)
-├── test.py            # quick sanity checks
 ├── requirements.txt   # pip dependencies
 └── README.md          # ← you are here
 ```
@@ -25,7 +26,7 @@ project_root/
 
 ---
 
-## 2  Quick-start — reproduce all report figures
+## 2  Quick-start — reproduce study figures
 
 ```bash
 # 1) create a fresh environment (Python ≥ 3.10)
@@ -35,12 +36,12 @@ source venv/bin/activate          # Windows: venv\Scripts\activate
 # 2) install dependencies
 pip install -r requirements.txt
 
-# 3) generate all plots used in the report
+# 3) generate the main study plots
 python genetic.py          # ≈ takes about an hour
 python tournamentLean.py   # ≈ 5-10 minutes
 ```
 
-Figures appear in Matplotlib windows **and** `./figures/`.
+Figures appear in Matplotlib windows **and** `./Figures/`.
 
 ---
 
@@ -51,7 +52,7 @@ Figures appear in Matplotlib windows **and** `./figures/`.
 | `genetic.py`        | 15 replicates × 8 variants (trunc/proportional × k = 1‑4). Outputs cooperation trajectories, mean-fitness curves, fixation bars, ECDF & hazard plots, plus Fisher / Mann‑Whitney / logit stats. | ≈ 75 s          |
 | `tournamentLean.py` | Monte-Carlo sweep over ε ∈ {0 %, 5 %, 10 %}. Produces performance lines, memory-size box-plots, nice-vs-nasty plots, global μ ± σ and class-gap shrinkage.                                      | ≈ 60 s          |
 | `tournament.py`     | Full round-robin for exploration; optional heat-maps and rankings.                                                                                                                               | 20 – 120 s      |
-| `test.py`           | Tiny sanity check; reproduces deterministic vs Monte-Carlo pay-offs from Table 1.                                                                                                                | < 2 s           |
+| `Utils/test.py`     | Tiny sanity check for sample deterministic vs Monte-Carlo pay-offs.                                                                                                                              | < 2 s           |
 
 ---
 
@@ -59,10 +60,10 @@ Figures appear in Matplotlib windows **and** `./figures/`.
 
 | Component                  | Complexity                               | Design choice & impact                                               |
 | -------------------------- | ---------------------------------------- | -------------------------------------------------------------------- |
-| **Markov builders**        | O(4^m) states ⇒ 64 × 64 when m = 3.      | Project caps m ≤ 3; m = 4 would be 16× slower, not required.         |
+| **Markov builders**        | O(4^m) states ⇒ 64 × 64 when m = 3.      | Project caps m ≤ 3 to keep transition matrices tractable.            |
 | **Monte-Carlo engine**     | O(trials × rounds); default 10 000 × 50. | Gives SE ≈ 0.03 pts; trials can be halved for quick tests.           |
 | **Evolutionary simulator** | O(GEN × POP × (POP − 1)/2 × MC_cost).    | With GEN = 20, POP = 8 wall-time ≤ 80 s; larger POP tested via flag. |
-| **Memory footprint**       | Peak RAM ≈ 130 MB (NumPy arrays).        | Below Moodle auto-grader limit (512 MB).                             |
+| **Memory footprint**       | Peak RAM ≈ 130 MB (NumPy arrays).        | Comfortable for typical local analysis runs.                         |
 
 ---
 
@@ -87,9 +88,9 @@ To add a custom strategy, subclass `Strategies.strategy.Strategy` and implement:
 
 ## 6  Verification hooks
 
-- `test.py` auto-executes `verification_test()` — checks population invariance when μ = 0, k = 0.
-- Also reproduces deterministic vs Monte-Carlo pay-offs in < 2 s.
-- Code passes `flake8` / `ruff`; all folders are import-safe via `__init__.py`.
+- `genetic.py` runs `verification_test()` before the main experiment to check population invariance when μ = 0, k = 0.
+- `Utils/test.py` reproduces quick deterministic vs Monte-Carlo pay-off checks in < 2 s.
+- `Test/` contains unittest coverage for Markov dynamics, chromosome conversion, memory strategies, and result symmetry.
 
 ---
 

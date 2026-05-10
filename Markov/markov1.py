@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: Markov/markov1.py
 # Purpose: Build 4×4 transition matrix for memory-1 strategies.
 # ──────────────────────────────────────────────────────────

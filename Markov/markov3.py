@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: Markov/markov3.py
 # Purpose: Build 64×64 transition matrix for memory-3 strategies.
 # ──────────────────────────────────────────────────────────

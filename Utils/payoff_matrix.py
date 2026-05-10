@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: payoff_matrix.py      
 # Purpose: Prisoner’s Dilemma payoff dictionary {(CC/CD/DC/DD): (p1,p2)}.
 # ──────────────────────────────────────────────────────────

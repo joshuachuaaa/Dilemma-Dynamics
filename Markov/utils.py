@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: Markov/utils.py
 # Purpose: Small helper(s) for state-to-move mapping (e.g. flipped view).
 # ──────────────────────────────────────────────────────────

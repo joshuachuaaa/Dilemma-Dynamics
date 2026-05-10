@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: Markov/markov2.py
 # Purpose: Build 16×16 transition matrix for memory-2 strategies.
 # ──────────────────────────────────────────────────────────

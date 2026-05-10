@@ -1,7 +1,7 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
-# File: tournament_test.py
-# Purpose: Minimal test harness to compare Markov vs Monte-Carlo pay-offs.
+# Author: Joshua Chua Han Wei
+# File: tournamentLean.py
+# Purpose: Noise-sensitivity study for Monte-Carlo tournament pay-offs.
 # ──────────────────────────────────────────────────────────
 
 # ------------------------------------------------------------------- imports

@@ -1,6 +1,6 @@
 # ──────────────────────────────────────────────────────────
 # File: Game/game.py
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # Purpose: Core engines for the IPD – deterministic MarkovGame
 #          and MonteCarloGame (with trembling-hand error support).
 # ──────────────────────────────────────────────────────────

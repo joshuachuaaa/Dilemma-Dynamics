@@ -1,6 +1,6 @@
 # ────────────────────────────────────────────────────────────
 # File   : Utils/plot_helpers.py
-# Author : Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # Purpose: Re-usable helpers for saving Matplotlib figures
 # ────────────────────────────────────────────────────────────
 from pathlib import Path

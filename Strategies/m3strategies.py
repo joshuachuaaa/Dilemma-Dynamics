@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: Strategies/m3strategies.py
 # Purpose: Memory-3 strategies – Pavlov3, Generous3, Three-Grudger, etc.
 # ──────────────────────────────────────────────────────────

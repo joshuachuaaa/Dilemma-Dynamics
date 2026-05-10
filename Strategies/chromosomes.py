@@ -1,6 +1,6 @@
 # ──────────────────────────────────────────────────────────
 # File   : Strategies/chromosomes.py
-# Author : Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # Purpose: Bit-string / genetic “chromosome” strategy wrapper (variable memory)
 # ──────────────────────────────────────────────────────────
 

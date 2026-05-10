@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────
-# Author: Joshua Chua Han Wei – 32781555
+# Author: Joshua Chua Han Wei
 # File: gamestates.py
 # Purpose: Global definitions of outcome strings and helper lookup tables.
 # ──────────────────────────────────────────────────────────
