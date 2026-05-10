@@ -1,7 +1,7 @@
 # ──────────────────────────────────────────────────────────
 # Author: Joshua Chua Han Wei
 # File: tournamentLean.py
-# Purpose: Noise-sensitivity study for Monte-Carlo tournament pay-offs.
+# Purpose: Noise-sensitivity study for Monte-Carlo strategy pay-offs.
 # ──────────────────────────────────────────────────────────
 
 # ------------------------------------------------------------------- imports
@@ -62,9 +62,9 @@ def run_tournament(err: float) -> pd.Series:
     return pd.Series(pay, index=strategy_names)
 
 def class_gap(series: pd.Series) -> tuple[float,float,float]:
-    nice  = series[[k for k in series.index if name_to_nice[k]]].mean()
-    nasty = series[[k for k in series.index if not name_to_nice[k]]].mean()
-    return nice, nasty, nasty - nice
+    cooperative  = series[[k for k in series.index if name_to_nice[k]]].mean()
+    exploitative = series[[k for k in series.index if not name_to_nice[k]]].mean()
+    return cooperative, exploitative, exploitative - cooperative
 
 # ------------------------------------------------------------- main sweep
 if __name__ == "__main__":
@@ -78,10 +78,13 @@ if __name__ == "__main__":
         series = run_tournament(ε)
         payoff_sweep[label] = series
 
-        nice_m, nasty_m, gap = class_gap(series)
-        gap_records.append({"ε": ε, "nice": nice_m,
-                            "nasty": nasty_m, "gap": gap})
-        timestamp(f"  → nice = {nice_m:.2f}, nasty = {nasty_m:.2f}, gap = {gap:+.2f}")
+        cooperative_m, exploitative_m, gap = class_gap(series)
+        gap_records.append({"ε": ε, "cooperative": cooperative_m,
+                            "exploitative": exploitative_m, "gap": gap})
+        timestamp(
+            f"  → cooperative = {cooperative_m:.2f}, "
+            f"exploitative = {exploitative_m:.2f}, gap = {gap:+.2f}"
+        )
 
     gap_df = pd.DataFrame(gap_records).set_index("ε")
     print("\n=== Class gap summary ===")
@@ -127,7 +130,7 @@ if __name__ == "__main__":
     fig.suptitle("B) Distribution by memory size"); fig.tight_layout()
     save_fig("B_boxplot_memory.png", dpi=300, show=True)
 
-    # ----------------------------------------------------------------- Fig C  (nice vs nasty box-plots)
+    # ----------------------------------------------------------------- Fig C  (cooperative vs exploitative box-plots)
     fig, axes = plt.subplots(1, len(ERROR_LEVELS), figsize=(10, 4), sharey=True)
     for ax, ε in zip(axes, ERROR_LEVELS):
         col  = f"{int(ε*100)}%"
@@ -138,14 +141,14 @@ if __name__ == "__main__":
         ax.set_xlabel("is nice?")
         if ax is axes[0]:
             ax.set_ylabel("avg pay-off / round")
-    fig.suptitle("C) Nice vs nasty distribution"); fig.tight_layout()
+    fig.suptitle("C) Cooperative vs exploitative distribution"); fig.tight_layout()
     save_fig("C_boxplot_niceness.png", dpi=300, show=True)
 
     # ----------------------------------------------------------------- Fig D
     plt.figure(figsize=(5,4))
     plt.plot(gap_df.index, gap_df['gap'], marker='o')
     plt.axhline(0, ls='--', lw=0.8)
-    plt.xlabel("ε"); plt.ylabel("gap (nasty – nice)")
+    plt.xlabel("ε"); plt.ylabel("gap (exploitative – cooperative)")
     plt.title("D) Class gap shrinkage"); plt.tight_layout()
     save_fig("D_class_gap.png", dpi=300, show=True)
 
@@ -180,8 +183,8 @@ import numpy as np, pandas as pd, scipy.stats as st
 # slopes from payoff_sweep: (μ_10% - μ_0%) / 10
 slopes = (payoff_sweep["10%"] - payoff_sweep["0%"]) / 10
 
-nice_slopes  = slopes[[n for n in slopes.index if name_to_nice[n]]]
-nasty_slopes = slopes[[n for n in slopes.index if not name_to_nice[n]]]
+cooperative_slopes  = slopes[[n for n in slopes.index if name_to_nice[n]]]
+exploitative_slopes = slopes[[n for n in slopes.index if not name_to_nice[n]]]
 
 def mean_ci(data, alpha=0.05):
     m  = data.mean()
@@ -189,7 +192,7 @@ def mean_ci(data, alpha=0.05):
     t  = st.t.ppf(1 - alpha/2, len(data)-1)
     return m, m - t*se, m + t*se
 
-print("nice   slope, 95% CI:", mean_ci(nice_slopes))
-print("nasty  slope, 95% CI:", mean_ci(nasty_slopes))
-u,p = st.mannwhitneyu(nice_slopes, nasty_slopes, alternative="two-sided")
+print("cooperative  slope, 95% CI:", mean_ci(cooperative_slopes))
+print("exploitative slope, 95% CI:", mean_ci(exploitative_slopes))
+u,p = st.mannwhitneyu(cooperative_slopes, exploitative_slopes, alternative="two-sided")
 print("Mann–Whitney U, p:", u, p)

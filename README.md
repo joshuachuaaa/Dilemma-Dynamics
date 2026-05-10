@@ -1,8 +1,16 @@
-# Iterated-Prisoner’s-Dilemma Toolkit
+# Dilemma Dynamics
+
+## A Computational Research Framework for Evolutionary Cooperation
 
 **Author: Joshua Chua Han Wei**
 
 ---
+
+`Dilemma Dynamics` studies strategy selection, memory, noise, and cooperative
+takeover in the Iterated Prisoner's Dilemma. The project combines analytical
+Markov-chain evaluation, Monte-Carlo simulation, chromosome-encoded strategies,
+and evolutionary selection experiments into a reproducible local research
+workflow.
 
 ## 1  Project layout
 
@@ -15,9 +23,9 @@ project_root/
 ├── Utils/             # payoff, state, plotting, and quick-check helpers
 ├── Test/              # unittest coverage for games and strategy encoding
 │
-├── genetic.py         # evolutionary independent-study experiment
-├── tournamentLean.py  # noise-sensitivity independent-study experiment
-├── tournament.py      # full round-robin driver (exploration)
+├── genetic.py         # evolutionary cooperation experiment
+├── tournamentLean.py  # noise-sensitivity experiment
+├── tournament.py      # full round-robin analysis driver
 ├── requirements.txt   # pip dependencies
 └── README.md          # ← you are here
 ```
@@ -26,7 +34,7 @@ project_root/
 
 ---
 
-## 2  Quick-start — reproduce study figures
+## 2  Quick-start — reproduce analysis figures
 
 ```bash
 # 1) create a fresh environment (Python ≥ 3.10)
@@ -36,12 +44,12 @@ source venv/bin/activate          # Windows: venv\Scripts\activate
 # 2) install dependencies
 pip install -r requirements.txt
 
-# 3) generate the main study plots
+# 3) generate the main analysis plots
 python genetic.py          # ≈ takes about an hour
 python tournamentLean.py   # ≈ 5-10 minutes
 ```
 
-Figures appear in Matplotlib windows **and** `./Figures/`.
+Figures appear in Matplotlib windows **and** `./figures/`.
 
 ---
 
@@ -50,8 +58,8 @@ Figures appear in Matplotlib windows **and** `./Figures/`.
 | File                | Purpose                                                                                                                                                                                          | Typical runtime |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
 | `genetic.py`        | 15 replicates × 8 variants (trunc/proportional × k = 1‑4). Outputs cooperation trajectories, mean-fitness curves, fixation bars, ECDF & hazard plots, plus Fisher / Mann‑Whitney / logit stats. | ≈ 75 s          |
-| `tournamentLean.py` | Monte-Carlo sweep over ε ∈ {0 %, 5 %, 10 %}. Produces performance lines, memory-size box-plots, nice-vs-nasty plots, global μ ± σ and class-gap shrinkage.                                      | ≈ 60 s          |
-| `tournament.py`     | Full round-robin for exploration; optional heat-maps and rankings.                                                                                                                               | 20 – 120 s      |
+| `tournamentLean.py` | Monte-Carlo sweep over ε ∈ {0 %, 5 %, 10 %}. Produces performance lines, memory-size box-plots, cooperative-vs-exploitative plots, global μ ± σ and class-gap shrinkage.                         | ≈ 60 s          |
+| `tournament.py`     | Full round-robin analysis for strategy comparison; optional heat-maps and rankings.                                                                                                              | 20 – 120 s      |
 | `Utils/test.py`     | Tiny sanity check for sample deterministic vs Monte-Carlo pay-offs.                                                                                                                              | < 2 s           |
 
 ---
@@ -94,4 +102,5 @@ To add a custom strategy, subclass `Strategies.strategy.Strategy` and implement:
 
 ---
 
-Happy modelling!
+This framework is intended for reproducible computational experiments in
+evolutionary game dynamics.

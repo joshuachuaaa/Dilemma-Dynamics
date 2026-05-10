@@ -1,7 +1,7 @@
 # ──────────────────────────────────────────────────────────
 # Author: Joshua Chua Han Wei
 # File: tournament.py
-# Purpose: Full round-robin tournament driver with optional heat-maps / rankings.
+# Purpose: Full round-robin strategy analysis with optional heat-maps / rankings.
 # ──────────────────────────────────────────────────────────
 from Utils.save_figure import save_fig
 from Utils.random_seed import set_seed
@@ -251,7 +251,7 @@ if __name__ == "__main__":
     plt.figure(figsize=(8, 6))
     plt.barh(sorted_scores.index, sorted_scores.values, color=colors)
     plt.xlabel("Total Cumulative Score")
-    plt.title("Total Tournament Scores (Markov, no error)\n(Green = Nice – Red = Not Nice)")
+    plt.title("Total Strategy Scores (Markov, no error)\n(Green = Cooperative – Red = Exploitative)")
     plt.tight_layout()
     save_fig("Total_tournament_scores.png", dpi=300, show=True)
 
@@ -290,9 +290,7 @@ if __name__ == "__main__":
     stats_df.boxplot(column="avg_per_round", by="is_nice")
     plt.xlabel("Is Nice?")
     plt.ylabel("Average Score per Round")
-    plt.title("Nice vs. Non‐nice Strategy Performance")
+    plt.title("Cooperative vs. Exploitative Strategy Performance")
     plt.suptitle("")
     plt.tight_layout()
-    save_fig("nice_nasty_distribution", dpi=300, show=True)
-
-
+    save_fig("cooperative_exploitative_distribution", dpi=300, show=True)

@@ -2,15 +2,14 @@
 # ──────────────────────────────────────────────────────────
 # Author: Joshua Chua Han Wei
 # File: genetic.py
-# Purpose: Evolutionary simulation for the independent IPD study – trunc vs proportional
+# Purpose: Evolutionary cooperation study for the IPD – trunc vs proportional
 #          selection, plots, statistics, and built-in verification test.
 # ──────────────────────────────────────────────────────────
 """
 genetic.py
 ────────────────────────────────────────────────────────────────────────────
-Evolutionary Iterated Prisoner’s Dilemma (IPD) – “international-relations”
-analogy: each strategy = a ‘country’, C = cooperate/diplomacy, D = aggress.
-Adds depth to the independent study:
+Evolutionary Iterated Prisoner's Dilemma (IPD) study of cooperative takeover
+under competing selection regimes and mutation.
 
 • 15 replicates × 8 variants (rule ∈ {trunc, prop} × k ∈ {1–4})
 • Mean fitness trajectory       (mechanistic insight)
@@ -55,7 +54,7 @@ TRIALS        = 1_000
 ROUNDS        = 50
 ERROR         = 0.0
 POP_SIZE      = 8
-SEED_STATE    = (2, 6)       # two “co-operative nations”, six “aggressive”
+SEED_STATE    = (2, 6)       # two cooperative agents, six exploitative agents
 RAND_SEED     = 42
 N_REPS        = 15
 PRINT_EVERY   = 5            # generations between status messages
@@ -90,13 +89,13 @@ def mutate(parent: ChromosomeStrategy, mu: float = MU) -> ChromosomeStrategy:
     return child
 
 def seed_population() -> list[ChromosomeStrategy]:
-    """Initial mix of diplomatic (nice) and aggressive (nasty) ‘countries’."""
-    nice_pool  = [TitForTat(), WinStayLoseShift(), Pavlov2(),
-                  GenerousTwoTitForTwo()]
-    nasty_pool = [ReverseTitForTat(), SuspiciousTf2T(), Vindictive2(),
-                  Prober(), GrimTrigger(), Grim2()]
+    """Initial mix of cooperative and exploitative chromosome strategies."""
+    cooperative_pool = [TitForTat(), WinStayLoseShift(), Pavlov2(),
+                        GenerousTwoTitForTwo()]
+    exploitative_pool = [ReverseTitForTat(), SuspiciousTf2T(), Vindictive2(),
+                         Prober(), GrimTrigger(), Grim2()]
     pop: list[ChromosomeStrategy] = []
-    for s in nice_pool[:SEED_STATE[0]] + nasty_pool[:SEED_STATE[1]]:
+    for s in cooperative_pool[:SEED_STATE[0]] + exploitative_pool[:SEED_STATE[1]]:
         ch = ChromosomeStrategy(s.to_bitstring())
         ch.is_nice, ch.name = s.is_nice, s.name
         pop.append(ch)
@@ -195,8 +194,8 @@ for rule, style in [("trunc", "-"), ("prop", "--")]:
         plt.plot(gens, mean, linestyle=style, color=col, label=f"{rule} k={k}")
         plt.fill_between(gens, mean - sd, mean + sd, color=col, alpha=0.15)
 plt.xlabel("Generation")
-plt.ylabel("# Diplomatic countries  (mean ±1 SD)")
-plt.title("Evolution of cooperation – 15 replicates each")
+plt.ylabel("# Cooperative agents  (mean ±1 SD)")
+plt.title("Evolution of cooperation under selection pressure")
 plt.legend(ncol=2, fontsize="small")
 plt.tight_layout()
 save_fig("G1_diplomacy_fraction.png", dpi=300, show=True)
@@ -232,7 +231,7 @@ for i, rule in enumerate(rules):
                  fmt='none', capsize=4, elinewidth=1)
 plt.xticks(x, x)
 plt.ylabel("Fixation probability  (±95 % CI)")
-plt.title("Elite-slot size k vs co-operative takeover")
+plt.title("Elite-slot size k vs cooperative takeover")
 plt.legend(); plt.tight_layout()
 save_fig("G3_fixation_bars.png", dpi=300, show=True)
 
