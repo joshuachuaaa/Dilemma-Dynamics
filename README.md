@@ -1,6 +1,6 @@
 # Dilemma Dynamics
 
-![Latest simulation output](figures/E_global_mu_sigma.png)
+![Live round-robin GUI screenshot](docs/assets/live-round-robin.png)
 
 ## A Game Theory Study of Evolutionary Cooperation
 
