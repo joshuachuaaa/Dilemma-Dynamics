@@ -1,5 +1,7 @@
 # Dilemma Dynamics
 
+![Latest simulation output](figures/E_global_mu_sigma.png)
+
 ## A Game Theory Study of Evolutionary Cooperation
 
 `Dilemma Dynamics` is a personal research project for studying strategy
