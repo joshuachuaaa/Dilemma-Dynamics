@@ -100,7 +100,7 @@ Figures appear in Matplotlib windows **and** `./figures/`.
 | `tournamentLean.py` | Runs a Monte Carlo noise sweep at 0 percent, 5 percent, and 10 percent error. Outputs performance and class-gap plots. | about 60 s |
 | `tournament.py` | Runs the full round-robin strategy comparison. | 20 to 120 s |
 | `apps/strategy_tui.py` | Shows one matchup round by round in the terminal. | < 2 s |
-| `apps/simulation_gui.py` | Opens a small desktop GUI for one pairwise simulation. | < 2 s |
+| `apps/simulation_gui.py` | Opens a small desktop GUI with pairwise and live round-robin views. | < 2 s |
 | `Utils/test.py` | Quick check for deterministic vs Monte Carlo payoffs. | < 2 s |
 
 ---
@@ -152,11 +152,14 @@ For a dependency-free round-by-round trace:
 python apps/strategy_tui.py --strategy-a TitForTat --strategy-b AlwaysDefect --rounds 12
 ```
 
-For a small desktop GUI:
+For a small desktop GUI with a pairwise tab and a live round-robin tab:
 
 ```bash
 python apps/simulation_gui.py
 ```
+
+The round-robin tab updates the matchup log, total scores, and rankings after
+each completed strategy pairing.
 
 ---
 

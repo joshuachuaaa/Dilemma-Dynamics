@@ -66,6 +66,7 @@ Purpose:
 - Run one pairwise matchup from a small desktop window.
 - Select strategies, rounds, error rate, starting state, and seed.
 - Show final score, cooperation counts, a round table, and a simple score chart.
+- Run a live round-robin tournament and update rankings after each matchup.
 
 Status:
 - `apps/simulation_gui.py` provides this lightweight GUI without adding a new
