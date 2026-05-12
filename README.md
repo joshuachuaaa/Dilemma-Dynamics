@@ -41,7 +41,7 @@ dependency. GitHub can render them directly in this README.
 ```mermaid
 flowchart TB
     Scripts["genetic.py / tournamentLean.py / tournament.py"] --> Experiments["Experiments package"]
-    Apps["apps/strategy_tui.py"] --> Simulation["Simulation trace helpers"]
+    Apps["apps/strategy_tui.py / apps/simulation_gui.py"] --> Simulation["Simulation trace helpers"]
     Apps --> Registry["Strategy registry"]
     Experiments --> Game["Game engines"]
     Simulation --> Game
@@ -100,6 +100,7 @@ Figures appear in Matplotlib windows **and** `./figures/`.
 | `tournamentLean.py` | Runs a Monte Carlo noise sweep at 0 percent, 5 percent, and 10 percent error. Outputs performance and class-gap plots. | about 60 s |
 | `tournament.py` | Runs the full round-robin strategy comparison. | 20 to 120 s |
 | `apps/strategy_tui.py` | Shows one matchup round by round in the terminal. | < 2 s |
+| `apps/simulation_gui.py` | Opens a small desktop GUI for one pairwise simulation. | < 2 s |
 | `Utils/test.py` | Quick check for deterministic vs Monte Carlo payoffs. | < 2 s |
 
 ---
@@ -149,6 +150,12 @@ For a dependency-free round-by-round trace:
 
 ```bash
 python apps/strategy_tui.py --strategy-a TitForTat --strategy-b AlwaysDefect --rounds 12
+```
+
+For a small desktop GUI:
+
+```bash
+python apps/simulation_gui.py
 ```
 
 ---

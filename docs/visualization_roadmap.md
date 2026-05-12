@@ -58,6 +58,19 @@ Why it fits:
 - Works naturally with Pandas and Matplotlib.
 - Good for independent-study/research demonstration.
 
+### 1a. Lightweight Desktop GUI
+
+Best fit: Tkinter.
+
+Purpose:
+- Run one pairwise matchup from a small desktop window.
+- Select strategies, rounds, error rate, starting state, and seed.
+- Show final score, cooperation counts, a round table, and a simple score chart.
+
+Status:
+- `apps/simulation_gui.py` provides this lightweight GUI without adding a new
+  dependency.
+
 ### 2. Pairwise Simulation Viewer
 
 Purpose:
