@@ -391,9 +391,9 @@ class SimulationGUI:
         panes.grid(row=1, column=0, sticky="nsew")
 
         ranking_frame = ttk.LabelFrame(panes, text="Live rankings", padding=8)
-        match_frame = ttk.LabelFrame(panes, text="Completed matchups", padding=8)
+        score_frame = ttk.LabelFrame(panes, text="Live total score bars", padding=8)
         panes.add(ranking_frame, weight=2)
-        panes.add(match_frame, weight=3)
+        panes.add(score_frame, weight=3)
 
         self.rr_ranking_table = self._make_tree(
             ranking_frame,
@@ -420,23 +420,19 @@ class SimulationGUI:
             },
         )
 
-        self.rr_match_table = self._make_tree(
-            match_frame,
-            columns=("match", "strategy_a", "score_a", "strategy_b", "score_b"),
-            headings={
-                "match": "Match",
-                "strategy_a": "Strategy A",
-                "score_a": "Score A",
-                "strategy_b": "Strategy B",
-                "score_b": "Score B",
-            },
-            widths={
-                "match": 100,
-                "strategy_a": 220,
-                "score_a": 100,
-                "strategy_b": 220,
-                "score_b": 100,
-            },
+        score_frame.columnconfigure(0, weight=1)
+        score_frame.rowconfigure(0, weight=1)
+        self.rr_score_canvas = tk.Canvas(
+            score_frame,
+            bg="white",
+            height=280,
+            highlightthickness=1,
+            highlightbackground="#c7c7c7",
+        )
+        self.rr_score_canvas.grid(row=0, column=0, sticky="nsew")
+        self.rr_score_canvas.bind(
+            "<Configure>",
+            lambda _event: self._draw_round_robin_bars(),
         )
 
     def _make_tree(
@@ -633,7 +629,6 @@ class SimulationGUI:
         self.rr_results = []
         self.rr_run_button.configure(state="disabled")
         self.rr_stop_button.configure(state="normal")
-        self._clear_tree(self.rr_match_table)
         self._refresh_round_robin_rankings()
         total_matches = len(selected) * (len(selected) - 1) // 2
         self.rr_progress.configure(maximum=total_matches, value=0)
@@ -697,18 +692,6 @@ class SimulationGUI:
 
     def _record_round_robin_match(self, result: MatchResult) -> None:
         self.rr_results.append(result)
-        self.rr_match_table.insert(
-            "",
-            "end",
-            values=(
-                f"{result.match_index} / {result.total_matches}",
-                result.strategy_a,
-                f"{result.score_a:.2f}",
-                result.strategy_b,
-                f"{result.score_b:.2f}",
-            ),
-        )
-        self.rr_match_table.yview_moveto(1.0)
         self._refresh_round_robin_rankings()
         self.rr_progress.configure(value=result.match_index)
         self.rr_progress_text.set(f"{result.match_index} / {result.total_matches} matches")
@@ -721,6 +704,7 @@ class SimulationGUI:
     def _refresh_round_robin_rankings(self) -> None:
         self._clear_tree(self.rr_ranking_table)
         if not self.rr_selected_names:
+            self._draw_round_robin_bars()
             return
         rankings = build_rankings(self.rr_selected_names, self.rr_results)
         for row in rankings:
@@ -737,6 +721,92 @@ class SimulationGUI:
                     row.losses,
                     row.ties,
                 ),
+            )
+        self._draw_round_robin_bars()
+
+    def _draw_round_robin_bars(self) -> None:
+        self.rr_score_canvas.delete("all")
+        width = max(self.rr_score_canvas.winfo_width(), 420)
+        height = max(self.rr_score_canvas.winfo_height(), 240)
+
+        if not self.rr_selected_names:
+            self.rr_score_canvas.create_text(
+                width / 2,
+                height / 2,
+                text="Select strategies to see live scores",
+                fill="#555",
+            )
+            return
+
+        rankings = build_rankings(self.rr_selected_names, self.rr_results)
+        max_score = max((row.total_score for row in rankings), default=0.0)
+        left_pad = 190
+        right_pad = 72
+        top_pad = 28
+        bottom_pad = 18
+        available_height = max(80, height - top_pad - bottom_pad)
+        row_height = max(18, min(30, available_height / max(len(rankings), 1)))
+        bar_height = max(10, row_height * 0.55)
+        bar_width_max = max(80, width - left_pad - right_pad)
+
+        self.rr_score_canvas.create_text(
+            12,
+            12,
+            text="Total score",
+            anchor="w",
+            fill="#333",
+            font=("TkDefaultFont", 10, "bold"),
+        )
+
+        if max_score <= 0:
+            self.rr_score_canvas.create_text(
+                left_pad,
+                height - 14,
+                text="Bars grow as matchups finish",
+                anchor="w",
+                fill="#666",
+            )
+
+        for index, row in enumerate(rankings):
+            y_center = top_pad + index * row_height + row_height / 2
+            y0 = y_center - bar_height / 2
+            y1 = y_center + bar_height / 2
+            x0 = left_pad
+            proportion = row.total_score / max_score if max_score > 0 else 0.0
+            x1 = x0 + bar_width_max * proportion
+            color = "#2f6fef" if index == 0 else "#4c9f70"
+
+            label = f"{row.rank}. {row.strategy}"
+            self.rr_score_canvas.create_text(
+                12,
+                y_center,
+                text=label,
+                anchor="w",
+                fill="#222",
+            )
+            self.rr_score_canvas.create_rectangle(
+                x0,
+                y0,
+                x0 + bar_width_max,
+                y1,
+                fill="#eeeeee",
+                outline="",
+            )
+            if x1 > x0:
+                self.rr_score_canvas.create_rectangle(
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    fill=color,
+                    outline="",
+                )
+            self.rr_score_canvas.create_text(
+                min(x1 + 8, width - right_pad + 8),
+                y_center,
+                text=f"{row.total_score:.1f}",
+                anchor="w",
+                fill="#222",
             )
 
     def _finish_round_robin(self, message: str) -> None:
